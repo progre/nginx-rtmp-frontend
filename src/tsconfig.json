@@ -1,0 +1,8 @@
+{
+    "compilerOptions": {
+        "noImplicitAny": true,
+        "noEmitOnError": true,
+        "target": "ES6",
+        "experimentalAsyncFunctions": true
+    }
+}

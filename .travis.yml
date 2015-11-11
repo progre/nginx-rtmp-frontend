@@ -1,0 +1,16 @@
+language: node_js
+node_js: 5
+env:
+  APP_NAME=nginx-rtmp-frontend
+before_script:
+  - npm install gulp
+before_deploy:
+  - ./pack.sh
+deploy:
+  provider: releases
+  file:
+    - $APP_NAME-win.zip
+    - $APP_NAME-win-x64.zip
+    - $APP_NAME-osx.zip
+  on:
+    tags: true
