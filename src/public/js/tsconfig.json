@@ -1,6 +1,7 @@
 {
     "compilerOptions": {
         "experimentalAsyncFunctions": true,
+        "jsx": "react",
         "noImplicitAny": true,
         "noEmitOnError": true,
         "target": "ES6"

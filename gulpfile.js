@@ -7,7 +7,14 @@ require('./gulp/copy')();
 require('./gulp/jade')();
 require('./gulp/stylus')();
 require('./gulp/test')();
-require('./gulp/ts')();
+require('./gulp/ts')({
+    browserify: {
+        files: [{
+            src: 'src/public/js/app.tsx',
+            dest: 'lib/public/js/'
+        }]
+    }
+});
 
 gulp.task('default', ['build', 'watch']);
 
@@ -32,7 +39,7 @@ gulp.task('ts', callback => {
 });
 
 gulp.task('watch', () => {
-    gulp.watch('src/**/*.js', ['copy']);
+    gulp.watch('src/**/*.js', ['copy:copy']);
     gulp.watch(['src/**/*.ts', '!src/test/'], ['ts']);
     gulp.watch('src/**/*.jade', ['jade:build']);
     gulp.watch('src/**/*.stylus', ['stylus:build']);

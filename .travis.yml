@@ -2,6 +2,7 @@ language: node_js
 node_js: 5
 env:
   APP_NAME=nginx-rtmp-frontend
+  ELECTRON_VER=0.34.3
 before_script:
   - npm install gulp
 before_deploy:

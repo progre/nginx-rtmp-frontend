@@ -22,6 +22,7 @@
   },
   "homepage": "https://github.com/progre/nginx-rtmp-frontend",
   "devDependencies": {
+    "babel-preset-es2015": "^6.1.4",
     "babelify": "^7.2.0",
     "browserify": "^12.0.1",
     "del": "^2.0.2",
@@ -50,6 +51,8 @@
     "vinyl-source-stream": "^1.1.0"
   },
   "dependencies": {
-    "log4js": "^0.6.27"
+    "log4js": "^0.6.27",
+    "native-promisify": "^1.2.0",
+    "nginx-conf": "^1.1.0"
   }
 }
