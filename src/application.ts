@@ -3,60 +3,46 @@ const BrowserWindow = require('browser-window');
 import * as log4js from 'log4js';
 const logger = log4js.getLogger();
 import promisify from 'native-promisify';
-const nginx = require('nginx-server');
 import TrayIcon from './ui/trayicon';
 import {mainWindow} from './ui/windowfactory';
+import Nginx from './service/nginx';
 import * as repository from './service/repository';
 
 export default class Application {
-    private server: any;
+    private nginx = new Nginx();
+    private trayIcon = new TrayIcon();
 
     static async new() {
         await new Promise((resolve, reject) => app.once('ready', resolve));
         keepAlive();
-        let trayIcon = new TrayIcon();
-        trayIcon.on('quit', () => {
-            app.quit();
-        });
         let config: any;
         try {
             config = await repository.get();
         } catch (e) {
         }
-        let instance = new Application();
+        let instance = new Application(config);
         if (config == null) {
             mainWindow().show();
             // return instance;
         }
-        await instance.startServer();
+        instance.startServer();
         return instance;
     }
 
-    constructor() {
-        this.initServer();
-    }
-
-    private initServer() {
-        var options = {
-            command: 'E:\\Applications\\Developments\\nginx 1.9.7.1 Kitty\\nginx.exe',
-            config: 'E:\\Developments\\rtmpmulti\\nginx.conf'
-        };
-        this.server = nginx(options);
-        this.server.startAsync = promisify(this.server.start);
-        this.server.stopAsync = promisify(this.server.stop);
-    }
-
-    private async startServer() {
-        logger.debug('nginx starting.');
-        logger.debug('', this.server.start);
-        this.server.start((a: any, b: any) => {
-            logger.info('nginx started.', a, b);
+    constructor(config: any) {
+        this.trayIcon.on('quit', () => {
+            app.quit();
         });
+        this.nginx.exePath = config.exePath;
+        this.nginx.confPath = config.confPath;
     }
 
-    private async stopServer() {
-        await this.server.stop();
-        logger.info('nginx stopped.');
+    private startServer() {
+        this.nginx.start();
+    }
+
+    private stopServer() {
+        this.nginx.stop();
     }
 }
 
