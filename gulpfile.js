@@ -7,14 +7,7 @@ require('./gulp/copy')();
 require('./gulp/jade')();
 require('./gulp/stylus')();
 require('./gulp/test')();
-require('./gulp/ts')({
-    browserify: {
-        files: [{
-            src: 'src/public/js/app.tsx',
-            dest: 'lib/public/js/'
-        }]
-    }
-});
+require('./gulp/ts')();
 
 gulp.task('default', ['build', 'watch']);
 

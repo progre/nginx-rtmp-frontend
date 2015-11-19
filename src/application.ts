@@ -10,37 +10,48 @@ const logger = log4js.getLogger();
 export default class Application {
     private nginx = new Nginx();
     private trayIcon = new TrayIcon();
+    private mainWindow = mainWindow();
 
     static async new() {
-        let [_, config] = await Promise.all<any>([
-            (async() => {
-                await new Promise((resolve, reject) => app.once('ready', resolve));
-                await keepAlive();
-            })(),
-            (async() => {
-                await repository.init();
-                return await repository.getConfig();
-            })()
+        let [, config] = await Promise.all<any>([
+            new Promise((resolve, reject) => app.once('ready', resolve))
+                .then(() => keepAlive()),
+            repository.init()
+                .then(() => repository.getConfig())
         ]);
         let instance = new Application(config);
         if (config == null) {
-            mainWindow().show();
-            // return instance;
+            instance.mainWindow.show();
+            return instance;
         }
         instance.startServer();
         return instance;
     }
 
-    constructor(config: any) {
+    constructor(private config: repository.Config) {
+        (<any>global).mainProcess = {
+            config,
+            save() {
+                repository.setConfig(config)
+            }
+        };
+
+        let onClose = () => {
+            logger.info('on close');
+            this.mainWindow = mainWindow();
+            this.mainWindow.on('close', onClose);
+        }
+        this.mainWindow.on('close', onClose);
         this.trayIcon.on('quit', () => {
             app.quit();
         });
-        this.nginx.exePath = config.exePath;
-        this.nginx.confPath = config.confPath;
+        this.trayIcon.on('config', () => {
+            this.mainWindow.show();
+        });
     }
 
     private startServer() {
-        this.nginx.start();
+        this.nginx.start(this.config.exePath);
         this.trayIcon.running = true;
     }
 

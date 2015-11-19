@@ -1,5 +1,9 @@
 {
     "compilerOptions": {
         "target": "ES6"
-    }
+    },
+    "files": [
+        "gulpfile.js",
+        "gulp/ts.js"
+    ]
 }

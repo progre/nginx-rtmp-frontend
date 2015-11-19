@@ -1,20 +1,21 @@
 import {ChildProcess, spawn} from 'child_process';
 import * as log4js from 'log4js';
 const logger = log4js.getLogger();
+import * as repository from './repository';
 
 export default class Nginx {
-    exePath: string;
-    confPath: string;
+    private exePath: string;
 
     private process: Process;
 
-    start() {
-        this.process = new Process(this.exePath, this.confPath);
+    start(exePath: string) {
+        this.exePath = exePath;
+        this.process = new Process(this.exePath, repository.NGINX_CONFIG_PATH);
     }
 
     restart() {
         this.stop();
-        this.start();
+        this.start(this.exePath);
     }
 
     stop() {

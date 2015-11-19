@@ -1,11 +1,93 @@
 doctype html
 meta(charset='utf-8')
 title nginx-rtmp-frontend
+meta(name='viewport', content='width=device-width, initial-scale=1')
 link(rel='stylesheet' href='css/bootstrap.min.css')
 link(rel='stylesheet' href='css/font-awesome.min.css')
-#content
+style.
+  * {
+    font-family: "ヒラギノ角ゴ ProN W3", "Hiragino Kaku Gothic ProN", "游ゴシック", YuGothic, "メイリオ", Meiryo, sans-serif;
+  }
+.container
+  p
+    fieldset
+      legend ローカル設定
+      .row
+        .col-sm-3.text-right
+          label.form-control-static(for='nginx-path') nginxのパス:
+        .col-sm-9
+          input#nginx-path.form-control(type='file', accept='.exe')
+      .row
+        .col-sm-3.text-right
+          label.form-control-static(for='port') ポート:
+        .col-sm-2
+          input#port.form-control(
+            placeholder='1935', type='number', min='1', max='65535')
+      hr
+      .row
+        .col-sm-3.text-right
+          label.form-control-static(for='fms') FMS URL:
+        .col-sm-6
+          .input-group
+            input#fms.form-control(
+              type='text', readonly, style='width: 100%;',
+              value='rtmp://127.0.0.1:1935/live')
+            span.input-group-btn
+              button.btn.btn-secondary(type='button')
+                i.fa.fa-files-o
+                span(style='margin-left: 0.5em;') Copy
+      .row
+        .col-sm-push-3.col-sm-9
+          | OBSなどのエンコーダーのFMS URLにこのURLを貼り付けてください
+    fieldset
+      legend サービス設定
+      .row
+        .col-sm-4.btn-group-vertical
+          button.btn.btn-secondary
+            span.pull-left Twitch
+            span.pull-right
+              i.fa.fa-check
+          button.btn.btn-secondary.text-left
+            span.pull-left PeerCastStation
+            span.pull-right
+              i.fa.fa-check
+          button.btn.btn-secondary.text-left
+            span.pull-left CaveTube
+            span.pull-right
+              i.fa.fa-check
+          button.btn.btn-secondary.text-left
+            span.pull-left livecoding.tv
+            span.pull-right
+              i.fa.fa-check
+          button.btn.btn-secondary.text-left
+            span.pull-left niconico
+            span.pull-right
+              i.fa.fa-check
+        .col-sm-8
+          .row
+            .col-sm-push-3.col-sm-9
+              .checkbox
+                label
+                  input(type='checkbox')
+                  span 有効
+          .row
+            .col-sm-3.text-right
+              label.form-control-static(for='twitch-fms') FMS URL:
+            .col-sm-9
+              input#twitch-fms.form-control(style='width: 100%', type='text')
+          .row
+            .col-sm-3.text-right
+              label.form-control-static(for='twitch-key') 配信キー:
+            .col-sm-9
+              input#twitch-fms.form-control(style='width: 100%', type='text')
+  hr
+  fieldset.text-right
+    .row
+      .col-sm-12
+        button.btn.btn-primary(type="button") nginxを再起動
+    .row
+      .col-sm-12 nginxを再起動するまで設定は反映されません
 script.
   window.$ = window.jQuery = require("./js/vendor/jquery-2.1.4.min.js");
 script(src='js/vendor/bootstrap.min.js')
-script(src='js/vendor/react.min.js')
 script(src='js/app.js')

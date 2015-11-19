@@ -24,6 +24,9 @@ export default class TrayIcon extends EventEmitter {
             },
             { type: 'separator' },
             {
+                label: '設定', click: () => this.emit('config')
+            },
+            {
                 label: '終了', click: () => this.emit('quit')
             }
         ]);

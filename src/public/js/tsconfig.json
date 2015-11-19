@@ -1,9 +1,8 @@
 {
     "compilerOptions": {
-        "experimentalAsyncFunctions": true,
-        "jsx": "react",
         "noImplicitAny": true,
         "noEmitOnError": true,
-        "target": "ES6"
+        "target": "ES5",
+        "module": "umd"
     }
 }

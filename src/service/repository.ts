@@ -10,7 +10,7 @@ const NginxConfFile = require('nginx-conf').NginxConfFile;
 const create = promisify(NginxConfFile.create);
 
 const CONFIG_PATH = app.getPath('userData') + '/' + 'config.json';
-const NGINX_CONFIG_PATH = app.getPath('userData') + '/' + 'nginx.conf';
+export const NGINX_CONFIG_PATH = app.getPath('userData') + '/' + 'nginx.conf';
 const NGINX_CONFIG_TEMPLATE_PATH = normalize(__dirname + '/../res/nginx-default.conf');
 
 export async function init() {
@@ -40,9 +40,10 @@ export async function getConfig() {
 }
 
 export function setConfig(config: Config) {
+    logger.debug('save');
     return writeFile(CONFIG_PATH, JSON.stringify(config), { encoding: 'ascii' });
 }
 
-interface Config {
+export interface Config {
     exePath: string;
 }

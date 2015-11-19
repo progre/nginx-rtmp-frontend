@@ -4,8 +4,8 @@ import * as path from 'path';
 export function mainWindow() {
     let win = new BrowserWindow({
         width: 800,
-        height: 300,
-        resizable: false,
+        height: 800,
+        resizable: true,
         show: false,
         'skip-taskbar': true
     });
