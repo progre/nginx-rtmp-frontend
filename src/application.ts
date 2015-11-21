@@ -1,52 +1,98 @@
 const app = require('app');
 const BrowserWindow = require('browser-window');
 import TrayIcon from './ui/trayicon';
-import {mainWindow} from './ui/windowfactory';
+import {createMainWindow} from './ui/windowfactory';
 import Nginx from './service/nginx';
-import * as repository from './service/repository';
+import {default as Repository, Config} from './service/repository';
+import NginxConfig from './service/nginxconfig';
 import * as log4js from 'log4js';
 const logger = log4js.getLogger();
 
 export default class Application {
     private nginx = new Nginx();
     private trayIcon = new TrayIcon();
-    private mainWindow = mainWindow();
+    private mainWindow: GitHubElectron.BrowserWindow = null;
 
     static async new() {
-        let [, config] = await Promise.all<any>([
+        let [, [repository, config, nginxConfig]] = await Promise.all<any>([
             new Promise((resolve, reject) => app.once('ready', resolve))
                 .then(() => keepAlive()),
-            repository.init()
-                .then(() => repository.getConfig())
+            Repository.new()
+                .then(repository => Promise.all<any>([
+                    repository,
+                    repository.getConfig(),
+                    repository.nginxConfig
+                ]))
         ]);
-        let instance = new Application(config);
-        if (config == null) {
-            instance.mainWindow.show();
+        let instance = new Application(repository, config, nginxConfig);
+        if (repository == null || config == null || nginxConfig == null) {
+            instance.showMainWindow();
             return instance;
         }
         instance.startServer();
         return instance;
     }
 
-    constructor(private config: repository.Config) {
-        (<any>global).mainProcess = {
-            config,
-            save() {
-                repository.setConfig(config);
-            }
-        };
-
-        let onClose = () => {
-            logger.info('on close');
-            this.mainWindow = mainWindow();
-            this.mainWindow.on('close', onClose);
-        };
-        this.mainWindow.on('close', onClose);
+    constructor(
+        private repository: Repository,
+        private config: Config,
+        private nginxConfig: NginxConfig
+    ) {
+        this.nginx.on('close', () => {
+            this.trayIcon.running = false;
+        });
         this.trayIcon.on('quit', () => {
             app.quit();
         });
         this.trayIcon.on('config', () => {
-            this.mainWindow.show();
+            this.showMainWindow();
+        });
+        this.trayIcon.on('click', () => {
+            if (this.mainWindow != null) {
+                this.showMainWindow();
+            }
+        });
+
+        let self = this;
+        (<any>global).mainProcess = {
+            config,
+            nginxConfig: {
+                port() { return nginxConfig.port; },
+                setPort(value: number) { nginxConfig.port = value; },
+                fms(service: string) { return nginxConfig.fms(service); },
+                setFms(service: string, fms: string) { nginxConfig.setFms(service, fms); },
+                key(service: string) { return nginxConfig.key(service); },
+                setKey(service: string, key: string) { nginxConfig.setKey(service, key); },
+                enabled(service: string) { return nginxConfig.enabled(service); },
+                enable(service: string) { nginxConfig.enable(service); },
+                disable(service: string) { nginxConfig.disable(service); }
+            },
+            save() {
+                Promise.all([
+                    repository.setConfig(config),
+                    nginxConfig.save()
+                ]).catch(e => {
+                    logger.error(e);
+                });
+            },
+            restart() {
+                self.stopServer();
+                self.startServer();
+            }
+        };
+    }
+
+    private showMainWindow() {
+        if (this.mainWindow == null) {
+            this.initMainWindow();
+        }
+        this.mainWindow.show();
+    }
+
+    private initMainWindow() {
+        this.mainWindow = createMainWindow();
+        this.mainWindow.on('close', () => {
+            this.mainWindow = null;
         });
     }
 
@@ -57,7 +103,6 @@ export default class Application {
 
     private stopServer() {
         this.nginx.stop();
-        this.trayIcon.running = false;
     }
 }
 

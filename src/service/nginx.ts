@@ -1,16 +1,28 @@
 import {ChildProcess, spawn} from 'child_process';
+import {EventEmitter} from 'events';
+import {dirname} from 'path';
 import * as log4js from 'log4js';
 const logger = log4js.getLogger();
 import * as repository from './repository';
 
-export default class Nginx {
+export default class Nginx extends EventEmitter {
     private exePath: string;
-
-    private process: Process;
+    private process: ChildProcess;
 
     start(exePath: string) {
+        logger.info('start server: ', exePath, '-c', repository.NGINX_CONFIG_PATH);
         this.exePath = exePath;
-        this.process = new Process(this.exePath, repository.NGINX_CONFIG_PATH);
+        this.process = spawn(
+            this.exePath,
+            ['-c', repository.NGINX_CONFIG_PATH],
+            { cwd: dirname(this.exePath) }
+        );
+        this.process.on('close', () => {
+            logger.info('server closed');
+            if (!this.isAlive) {
+                this.emit('close');
+            }
+        });
     }
 
     restart() {
@@ -25,17 +37,8 @@ export default class Nginx {
         this.process.kill();
         this.process = null;
     }
-}
 
-class Process {
-    private process: ChildProcess;
-
-    constructor(private exePath: string, private confPath: string) {
-        logger.info(exePath, confPath);
-        this.process = spawn(this.exePath, ['-c', this.confPath]);
-    }
-
-    kill() {
-        this.process.kill();
+    get isAlive() {
+        return this.process != null;
     }
 }

@@ -1,3 +1,5 @@
+import * as log4js from 'log4js';
+const logger = log4js.getLogger();
 const Tray = require('tray');
 const Menu = require('menu');
 import * as path from 'path';
@@ -10,6 +12,7 @@ export default class TrayIcon extends EventEmitter {
         super();
 
         this.tray.setContextMenu(this.createMenu(false));
+        this.tray.on('click', () => this.emit('click'));
     }
 
     set running(value: boolean) {
@@ -35,12 +38,9 @@ export default class TrayIcon extends EventEmitter {
 
 function createTray() {
     let resourcePath = path.normalize(__dirname + '/../res');
-    let tray: GitHubElectron.Tray;
-    if (process.platform === 'darwin') {
-        tray = new Tray(resourcePath + '/icon_16px@3x.png');
-    } else {
-        tray = new Tray(resourcePath + '/icon_192px.png');
-    }
+    let tray = new Tray(process.platform === 'darwin'
+        ? resourcePath + '/icon_16px@3x.png'
+        : resourcePath + '/icon_192px.png');
     tray.setToolTip('nginx-rtmp-frontend');
     return tray;
 }
