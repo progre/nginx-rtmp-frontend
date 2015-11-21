@@ -16,7 +16,10 @@ style.
         .col-sm-3.text-right
           label.form-control-static(for='nginx-path') nginxのパス:
         .col-sm-9
-          input#nginx-path.form-control(type='file', accept='.exe')
+          .input-group
+            input#nginx-path.form-control(type='text', style='width: 100%;')
+            span.input-group-btn
+              button#select-button.btn.btn-secondary(type='button') 選択...
       .row
         .col-sm-3.text-right
           label.form-control-static(for='port') ポート:

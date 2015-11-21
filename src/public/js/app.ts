@@ -1,25 +1,35 @@
 /// <reference path="./typings.d.ts" />
 const eRequire = require;
 const remote = eRequire('remote');
+const dialog: typeof GitHubElectron.Dialog = remote.require('dialog');
+import * as _os from 'os';
+const os: typeof _os = eRequire('os');
 
 $(() => {
-    console.log('hoge1')
     let mainProcess = remote.getGlobal('mainProcess');
     let config = mainProcess.config;
-    // await new Promise((resolve, reject) => {
-    //     console.log('hoge2')
-    //     resolve();
-    // });
-    // let [a, b, c] = [1,2,3];
-    console.log('hoge3')
-    
-    let path = config.exePath;
     $('#nginx-path')
-        .val(path)
+        .val(config.exePath)
         .change(function() {
             console.log(config.exePath);
             config.exePath = $(this).val();
             console.log(config.exePath);
+        });
+    let filters = os.platform() === 'win32'
+        ? [{ name: 'nginx.exe', extensions: ['exe'] }]
+        : [];
+    $('#select-button')
+        .click(() => {
+            dialog.showOpenDialog(
+                {
+                    filters
+                },
+                fileNames => {
+                    if (fileNames == null) {
+                        return;
+                    }
+                    $('#nginx-path').val(fileNames[0]);
+                });
         });
     // addEventListener('blue', () => {
     //     mainProcess.save();

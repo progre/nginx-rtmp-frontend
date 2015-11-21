@@ -32,7 +32,7 @@ export default class Application {
         (<any>global).mainProcess = {
             config,
             save() {
-                repository.setConfig(config)
+                repository.setConfig(config);
             }
         };
 
@@ -40,7 +40,7 @@ export default class Application {
             logger.info('on close');
             this.mainWindow = mainWindow();
             this.mainWindow.on('close', onClose);
-        }
+        };
         this.mainWindow.on('close', onClose);
         this.trayIcon.on('quit', () => {
             app.quit();

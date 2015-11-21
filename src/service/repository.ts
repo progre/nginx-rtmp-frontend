@@ -14,9 +14,8 @@ export const NGINX_CONFIG_PATH = app.getPath('userData') + '/' + 'nginx.conf';
 const NGINX_CONFIG_TEMPLATE_PATH = normalize(__dirname + '/../res/nginx-default.conf');
 
 export async function init() {
-    let ex = await new Promise((resolve, reject) => {
-        fs.exists(NGINX_CONFIG_PATH, resolve)
-    });
+    let ex = await new Promise((resolve, reject) =>
+        fs.exists(NGINX_CONFIG_PATH, resolve));
     if (ex) {
         return;
     }
@@ -34,7 +33,7 @@ export async function getConfig() {
         return <Config>JSON.parse(data);
     } catch (e) {
         return <Config>{
-            exePath: 'E:\\Applications\\Developments\\nginx 1.7.12.1 Lizard\\nginx.exe',
+            exePath: 'E:\\Applications\\Developments\\nginx 1.7.12.1 Lizard\\nginx.exe'
         };
     }
 }
