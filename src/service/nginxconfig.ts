@@ -147,17 +147,18 @@ class EnabledServices {
     update(item: Service, data: { fms?: string, key?: string }) {
         let i = this.getPushList()[item.index];
         let [fms, key] = i._value.split(' ');
+        key = key.replace(/^playpath=/, '');
         if (data.fms != null) {
             fms = data.fms;
         }
         if (data.key != null) {
             key = data.key;
         }
-        i._value = `${fms} ${key}`;
+        i._value = `${fms} playpath=${key}`;
     }
 
     add(item: { service: string, fms: string, key: string }) {
-        this.container._add('push', `${item.fms} ${item.key}`);
+        this.container._add('push', `${item.fms} playpath=${item.key}`);
         let list = this.getPushList();
         list[list.length - 1]._comments.push(item.service);
     }
@@ -169,12 +170,12 @@ class EnabledServices {
     private items() {
         return this.getPushList()
             .map((x, index) => {
-                let [fms, key] = x._value.split(' ');
+                let [fms, key] = (<string>x._value).split(' ');
                 return <Service>{
                     index,
                     service: x._comments[0],
                     fms,
-                    key
+                    key: key.replace(/^playpath=/, '')
                 };
             });
     }
@@ -206,6 +207,7 @@ class DisabledServices {
 
     update(item: Service, data: { fms?: string, key?: string }) {
         let [service, fms, key] = this.container[item.index].split(' ');
+        key = key.replace(/^playpath=/, '');
         if (data.fms != null) {
             fms = data.fms;
         }
@@ -231,7 +233,7 @@ class DisabledServices {
                     index,
                     service,
                     fms,
-                    key
+                    key: key.replace(/^playpath=/, '')
                 };
             });
     }
