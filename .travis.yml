@@ -1,5 +1,6 @@
 language: node_js
 node_js: 5
+rvm: 2.2.3
 env:
   APP_NAME=nginx-rtmp-frontend
   ELECTRON_VER=0.35.1
