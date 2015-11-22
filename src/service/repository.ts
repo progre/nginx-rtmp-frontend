@@ -26,7 +26,7 @@ export default class Repository {
             return <Config>JSON.parse(data);
         } catch (e) {
             return <Config>{
-                exePath: 'E:\\Applications\\Developments\\nginx 1.7.12.1 Lizard\\nginx.exe'
+                exePath: ''
             };
         }
     }

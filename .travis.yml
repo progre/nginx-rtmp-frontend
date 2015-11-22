@@ -2,7 +2,7 @@ language: node_js
 node_js: 5
 env:
   APP_NAME=nginx-rtmp-frontend
-  ELECTRON_VER=0.34.3
+  ELECTRON_VER=0.35.1
 before_script:
   - npm install gulp
 before_deploy:
@@ -11,7 +11,6 @@ deploy:
   provider: releases
   file:
     - $APP_NAME-win.zip
-    - $APP_NAME-win-x64.zip
     - $APP_NAME-osx.zip
   on:
     tags: true
