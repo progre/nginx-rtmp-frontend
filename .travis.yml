@@ -1,6 +1,5 @@
 language: node_js
 node_js: 5
-rvm: 2.2.3
 env:
   APP_NAME=nginx-rtmp-frontend
   ELECTRON_VER=0.35.1
@@ -8,6 +7,7 @@ before_script:
   - npm install gulp
 before_deploy:
   - ./pack.sh
+  - rvm use 2.0.0
 deploy:
   provider: releases
   file:
