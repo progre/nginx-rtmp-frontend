@@ -1,4 +1,3 @@
-npm install electron-packager
 mkdir dest
 cp -r lib/ dest/lib
 cp LICENSE dest/

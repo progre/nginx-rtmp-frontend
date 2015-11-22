@@ -12,6 +12,9 @@ export default class Nginx extends EventEmitter {
     start(exePath: string) {
         logger.info('start server: ', exePath, '-c', repository.NGINX_CONFIG_PATH);
         this.exePath = exePath;
+        if (exePath == null || exePath.length === 0) {
+            this.exePath = 'nginx';
+        }
         this.process = spawn(
             this.exePath,
             ['-c', repository.NGINX_CONFIG_PATH],

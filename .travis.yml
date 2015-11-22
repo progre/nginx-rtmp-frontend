@@ -4,8 +4,9 @@ env:
   APP_NAME=nginx-rtmp-frontend
   ELECTRON_VER=0.35.1
 before_script:
-  - npm install gulp
+  - npm i -g gulp
 before_deploy:
+  - npm i -g electron-packager
   - ./pack.sh
 deploy:
   provider: releases
