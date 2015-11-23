@@ -4,3 +4,11 @@ machine:
 checkout:
   post:
     - git submodule update --init
+deployment:
+  github:
+    commands:
+      - brew install mono wine
+      - npm i -g gulp
+      - npm i -g grunt-cli
+      - npm i -g electron-packager
+      - ./pack.sh
