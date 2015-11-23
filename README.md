@@ -4,7 +4,7 @@ nginx-rtmp-frontend
 A frontend for [nginx-rtmp-module](https://github.com/arut/nginx-rtmp-module).
 This will help in these things;
 - Easily switch the delivery service. for example, [Twitch](http://www.twitch.tv/), [livecoding.tv](http://www.livecoding.tv/), [niconico](http://live.nicovideo.jp/), and [PeerCastStation](http://www.pecastation.org/).
-- It will be delivered to multiple services.
+- It will be delivered to **multiple services**.
 
 Usage
 ----
