@@ -6,6 +6,7 @@ checkout:
     - git submodule update --init
 deployment:
   github:
+    tag: /[0-9]+(\.[0-9]+)*/
     commands:
       - brew install mono wine
       - npm i -g gulp
