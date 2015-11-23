@@ -23,7 +23,7 @@ $ brew install nginx-full --with-rtmp-module
 
 ----
 
-After that, execute `nginx-rtmp-frontend.exe` or `./nginx-rtmp-frontend`.
+After that, execute `nginx-rtmp-frontend.exe` or `nginx-rtmp-frontend`.
 
 First time, you need configuration. 
 If the configuration is not open, You can open that right-click on the tasktray icon and click the `configuration...` item.
