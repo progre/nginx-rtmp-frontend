@@ -2,7 +2,7 @@ sudo: false
 addons:
   apt:
     packages:
-    - mono-complete
+    - mono-devel
     - wine
 language: node_js
 node_js: 5
