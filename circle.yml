@@ -8,7 +8,7 @@ dependencies:
     - sudo add-apt-repository -y ppa:ubuntu-wine/ppa
     - sudo apt-get update
     - sudo apt-get install mono-devel
-    - sudo apt-get install wine1.7
+    - sudo apt-get install wine1.6
 checkout:
   post:
     - git submodule update --init
