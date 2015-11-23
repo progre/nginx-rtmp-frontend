@@ -1,8 +1,6 @@
 sudo: false
 addons:
   apt:
-    sources:
-    - ppa:directhex/monoxide 
     packages:
     - mono-devel
     - wine
