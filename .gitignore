@@ -1,2 +1,5 @@
+dest/
+installer32/
+nginx-rtmp-frontend-*/
 lib/
 node_modules/

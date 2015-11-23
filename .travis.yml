@@ -4,13 +4,16 @@ env:
   APP_NAME=nginx-rtmp-frontend
   ELECTRON_VER=0.35.1
 before_script:
+  - sudo apt-get install -y wine
   - npm i -g gulp
-before_deploy:
+  - npm i -g grunt-cli
   - npm i -g electron-packager
+before_deploy:
   - ./pack.sh
 deploy:
   provider: releases
   file:
+    - installer32/Setup.exe
     - $APP_NAME-win.zip
     - $APP_NAME-osx.zip
   on:
