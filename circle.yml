@@ -1,3 +1,6 @@
 machine:
   node:
     version: 5
+checkout:
+  post:
+    - git submodule update --init
