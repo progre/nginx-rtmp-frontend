@@ -3,8 +3,11 @@ machine:
     version: 5
 dependencies:
   pre:
+    - sudo apt-get install python-software-properties
+    - sudo add-apt-repository ppa:directhex/monoxide
     - sudo apt-get update
-    - sudo apt-get install mono-devel wine
+    - sudo apt-get install mono-devel
+    - sudo apt-get install wine
 checkout:
   post:
     - git submodule update --init
