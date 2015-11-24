@@ -25,6 +25,7 @@ before_deploy:
   - packwin.bat
   - cd %APPVEYOR_BUILD_FOLDER%
   - packosx.bat
+  - dir
 
 deploy:
   provider: GitHub
