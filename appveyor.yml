@@ -15,3 +15,15 @@ test_script:
   - node --version
   - npm --version
   - npm test
+
+deploy:
+  release: $(appveyor_build_version)
+  provider: GitHub
+  auth_token:
+    secure: e1Pbd0SskUsKHD903Wo4BcMMh+JgLOfKjRXJiK4Wkikne+dg7s8uMzE3SSFnqyX5
+  artifact: installer32/Setup.exe
+  draft: false
+  prerelease: false
+  on:
+    branch: master
+    appveyor_repo_tag: true

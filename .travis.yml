@@ -1,9 +1,4 @@
 sudo: false
-addons:
-  apt:
-    packages:
-    - mono-devel
-    - wine
 language: node_js
 node_js: 5
 env:
@@ -14,12 +9,11 @@ before_script:
   - npm i -g grunt-cli
   - npm i -g electron-packager
 before_deploy:
-  - ./pack.sh
+  - ./scripts/copy.sh
+  - ./scripts/packosx.sh
 deploy:
   provider: releases
   file:
-    - installer32/Setup.exe
-    - $APP_NAME-win.zip
     - $APP_NAME-osx.zip
   on:
     tags: true

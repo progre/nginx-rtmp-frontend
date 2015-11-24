@@ -1,12 +1,6 @@
 machine:
   node:
     version: 5
-dependencies:
-  pre:
-    - sudo apt-get update; sudo apt-get install python-software-properties
-    - sudo add-apt-repository -y ppa:directhex/monoxide
-    - sudo add-apt-repository -y ppa:ubuntu-wine/ppa
-    - sudo apt-get update; sudo apt-get install mono-devel wine
 checkout:
   post:
     - git submodule update --init
@@ -17,4 +11,5 @@ deployment:
       - npm i -g gulp
       - npm i -g grunt-cli
       - npm i -g electron-packager
-      - ./pack.sh
+      - ./scripts/copy.sh
+      - ./scripts/packosx.sh
