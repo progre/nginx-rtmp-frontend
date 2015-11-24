@@ -20,9 +20,10 @@ before_deploy:
   - set APP_NAME=nginx-rtmp-frontend
   - set ELECTRON_VER=0.35.1
   - copy scripts\copy.sh scripts\copy.bat
+  - pwd
   - scripts\copy.bat
-  - copy scripts\packwin.bat scripts\packwin_.bat
-  - scripts\packwin_.bat
+  - pwd
+  - scripts\packwin.bat
 
 deploy:
   release: $(appveyor_build_version)

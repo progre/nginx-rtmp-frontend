@@ -3,6 +3,6 @@ cp -r lib/ dest/lib
 cp LICENSE dest/
 cp package.json dest/
 cp README*.md dest/
-cd dest
+pushd dest
 npm install --production
-cd ..
+popd
