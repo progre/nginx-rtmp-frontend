@@ -16,6 +16,11 @@ test_script:
   - npm --version
   - npm test
 
+before_deploy:
+  - copy ./scripts/copy.sh ./scripts/copy.bat
+  - ./scripts/copy.bat
+  - ./scripts/packwin.bat
+
 deploy:
   release: $(appveyor_build_version)
   provider: GitHub
@@ -25,5 +30,4 @@ deploy:
   draft: false
   prerelease: false
   on:
-    branch: master
     appveyor_repo_tag: true
