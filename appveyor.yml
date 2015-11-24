@@ -21,7 +21,8 @@ before_deploy:
   - set ELECTRON_VER=0.35.1
   - copy scripts\copy.sh scripts\copy.bat
   - scripts\copy.bat
-  - scripts\packwin.bat
+  - copy scripts\packwin.bat scripts\packwin_.bat
+  - scripts\packwin_.bat
 
 deploy:
   release: $(appveyor_build_version)
