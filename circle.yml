@@ -12,4 +12,4 @@ deployment:
       - npm i -g grunt-cli
       - npm i -g electron-packager
       - ./scripts/copy.sh
-      - ./scripts/packosx.sh
+      - APP_NAME=nginx-rtmp-frontend ELECTRON_VER=0.35.1 ./scripts/packosx.sh
