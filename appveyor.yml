@@ -23,12 +23,15 @@ before_deploy:
   - scripts\copy.bat
   - cd %APPVEYOR_BUILD_FOLDER%
   - scripts\packwin.bat
+  - cd %APPVEYOR_BUILD_FOLDER%
+  - scripts\packosx.bat
 
 deploy:
-  release: $(APPVEYOR_REPO_TAG_NAME) Windows
   provider: GitHub
   auth_token:
     secure: TyOsDTpQJ+hMXU5/rtlKTluUS4XKw2+QSyFGnpMyYCy8WLEc2xSfortNiXayk0KF
-  artifact: installer32/Setup.exe
+  artifact:
+    - path: '*.exe'
+    - path: '*.zip'
   on:
     appveyor_repo_tag: true
