@@ -25,6 +25,7 @@ before_deploy:
   - scripts\packwin.bat
 
 deploy:
+  release: $(APPVEYOR_REPO_TAG_NAME) Windows
   provider: GitHub
   auth_token:
     secure: TyOsDTpQJ+hMXU5/rtlKTluUS4XKw2+QSyFGnpMyYCy8WLEc2xSfortNiXayk0KF
