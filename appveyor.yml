@@ -29,6 +29,5 @@ deploy:
   auth_token:
     secure: TyOsDTpQJ+hMXU5/rtlKTluUS4XKw2+QSyFGnpMyYCy8WLEc2xSfortNiXayk0KF
   artifact: /.*\.(exe|zip)/
-  prerelease: true
   on:
     appveyor_repo_tag: true
