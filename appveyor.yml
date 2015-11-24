@@ -1,0 +1,14 @@
+environment:
+  nodejs_version: "5.1.0"
+
+install:
+  - ps: Install-Product node $env:nodejs_version
+  - npm install
+  - npm i -g gulp
+  - npm i -g grunt-cli
+  - npm i -g electron-packager
+
+test_script:
+  - node --version
+  - npm --version
+  - npm test
