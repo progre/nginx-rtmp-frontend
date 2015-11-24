@@ -25,12 +25,9 @@ before_deploy:
   - scripts\packwin.bat
 
 deploy:
-  release: $(appveyor_build_version)
   provider: GitHub
   auth_token:
-    secure: e1Pbd0SskUsKHD903Wo4BcMMh+JgLOfKjRXJiK4Wkikne+dg7s8uMzE3SSFnqyX5
+    secure: TyOsDTpQJ+hMXU5/rtlKTluUS4XKw2+QSyFGnpMyYCy8WLEc2xSfortNiXayk0KF
   artifact: installer32/Setup.exe
-  draft: false
-  prerelease: false
   on:
     appveyor_repo_tag: true
