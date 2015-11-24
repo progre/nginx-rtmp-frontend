@@ -8,6 +8,8 @@ install:
   - npm i -g grunt-cli
   - npm i -g electron-packager
 
+build: off
+
 test_script:
   - node --version
   - npm --version
