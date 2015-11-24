@@ -21,8 +21,9 @@ before_deploy:
   - set ELECTRON_VER=0.35.1
   - copy scripts\* .
   - copy.bat
-  - pwd
+  - cd %APPVEYOR_BUILD_FOLDER%
   - packwin.bat
+  - cd %APPVEYOR_BUILD_FOLDER%
   - packosx.bat
 
 deploy:
