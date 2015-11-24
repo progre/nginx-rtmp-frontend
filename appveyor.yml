@@ -30,8 +30,6 @@ deploy:
   provider: GitHub
   auth_token:
     secure: TyOsDTpQJ+hMXU5/rtlKTluUS4XKw2+QSyFGnpMyYCy8WLEc2xSfortNiXayk0KF
-  artifact:
-    - path: '*.exe'
-    - path: '*.zip'
+  artifact: /.*\.(exe|zip)/
   on:
     appveyor_repo_tag: true
