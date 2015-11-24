@@ -19,16 +19,16 @@ test_script:
 before_deploy:
   - set APP_NAME=nginx-rtmp-frontend
   - set ELECTRON_VER=0.35.1
-  - scripts\copy.bat
-  - cd %APPVEYOR_BUILD_FOLDER%
-  - scripts\packwin.bat
-  - cd %APPVEYOR_BUILD_FOLDER%
-  - scripts\packosx.bat
+  - copy scripts\* .
+  - copy.bat
+  - packwin.bat
+  - packosx.bat
 
 deploy:
   provider: GitHub
   auth_token:
     secure: TyOsDTpQJ+hMXU5/rtlKTluUS4XKw2+QSyFGnpMyYCy8WLEc2xSfortNiXayk0KF
   artifact: /.*\.(exe|zip)/
+  prerelease: true
   on:
     appveyor_repo_tag: true
