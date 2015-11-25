@@ -4,5 +4,5 @@ cp LICENSE dest/
 cp package.json dest/
 cp README*.md dest/
 cd dest
-npm install --production
+call npm install --production
 cd ..
