@@ -16,20 +16,22 @@ test_script:
   - npm --version
   - npm test
 
-before_deploy:
+after_test:
+  - choco install 7zip.commandline
   - set APP_NAME=nginx-rtmp-frontend
   - set ELECTRON_VER=0.35.1
-  - choco install 7zip.commandline
-  - copy scripts\* .
-  - call copy.bat
-  - call packwin.bat
-  - call packosx.bat
-  - dir
+  - gulp copy-to-dest
+  - scripts/packwin.bat
+
+artifacts:
+  - path: '*.zip'
+    name: Standalone
+  - path: '*.exe'
+    name: Installer
 
 deploy:
   provider: GitHub
   auth_token:
     secure: TyOsDTpQJ+hMXU5/rtlKTluUS4XKw2+QSyFGnpMyYCy8WLEc2xSfortNiXayk0KF
-  artifact: /.*\.(exe|zip)/
   on:
     appveyor_repo_tag: true

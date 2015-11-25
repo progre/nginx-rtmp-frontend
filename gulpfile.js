@@ -1,4 +1,6 @@
 'use strict';
+const mkdir = require('native-promisify')(require('fs').mkdir);
+const exec = require('native-promisify')(require('child_process').exec);
 const gulp = require('gulp');
 const del = require('del');
 const runSequence = require('run-sequence');
@@ -37,4 +39,19 @@ gulp.task('watch', () => {
     gulp.watch('src/**/*.jade', ['jade:build']);
     gulp.watch('src/**/*.stylus', ['stylus:build']);
     gulp.watch('src/test/**/*.ts', ['test']);
+});
+
+gulp.task('copy-to-dest', () => {
+    return mkdir('dest')
+        .then(() => exec('cp -r lib/ dest/lib')).then(printStdout)
+        .then(() => exec('cp LICENSE dest/')).then(printStdout)
+        .then(() => exec('cp package.json dest/')).then(printStdout)
+        .then(() => exec('cp README*.md dest/')).then(printStdout)
+        .then(() => exec('npm install --production', { cwd: 'dest' })).then(printStdout);
+
+    function printStdout(stdout) {
+        if (stdout.length > 0) {
+            console.log(stdout);
+        }
+    }
 });
