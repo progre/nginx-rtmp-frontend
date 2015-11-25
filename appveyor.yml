@@ -19,11 +19,10 @@ test_script:
 before_deploy:
   - set APP_NAME=nginx-rtmp-frontend
   - set ELECTRON_VER=0.35.1
+  - choco install 7zip.commandline
   - copy scripts\* .
   - call copy.bat
-  - cd %APPVEYOR_BUILD_FOLDER%
   - call packwin.bat
-  - cd %APPVEYOR_BUILD_FOLDER%
   - call packosx.bat
   - dir
 
