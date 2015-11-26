@@ -1,6 +1,6 @@
 {
   "name": "nginx-rtmp-frontend",
-  "version": "0.0.40",
+  "version": "0.1.0",
   "description": "A frontend for nginx-rtmp-module.",
   "main": "lib/index.js",
   "scripts": {
