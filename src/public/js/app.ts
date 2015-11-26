@@ -7,6 +7,18 @@ const os: typeof _os = eRequire('os');
 const SERVICES = ['twitch', 'peercaststation', 'cavetube', 'livecodingtv', 'niconico'];
 
 $(() => {
+    i18n.init({ lng: navigator.language }, function() {
+        $('[class*=i18n-]').each((i, elem) => {
+            let key = elem.className
+                .split(' ')
+                .filter(x => x.indexOf('i18n-') === 0)[0]
+                .slice('i18n-'.length);
+                console.log(key)
+            $(elem).text(i18n.t(key));
+        });
+        $('#root').fadeIn('fast');
+    });
+
     let mainProcess = remote.getGlobal('mainProcess');
     let config = mainProcess.config;
     let nginxConfig = mainProcess.nginxConfig;

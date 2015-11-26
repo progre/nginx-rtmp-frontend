@@ -1,0 +1,13 @@
+{
+    "local-settings": "ローカル設定",
+    "path-to-nginx": "nginxのパス:",
+    "port": "ポート:",
+    "select": "選択...",
+    "notification-for-fms-url": "OBSなどのエンコーダーのFMS URLにこのURLを貼り付けてください",
+    "copy": "コピー",
+    "service-settings": "サービス設定",
+    "enable": "有効",
+    "stream-key": "配信キー:",
+    "restart-nginx": "nginxを再起動",
+    "notification-for-restart-nginx": "nginxを再起動するまで設定は反映されません"
+}

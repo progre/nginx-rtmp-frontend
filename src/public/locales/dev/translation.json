@@ -1,0 +1,13 @@
+{
+    "local-settings": "Local settings",
+    "path-to-nginx": "Path to nginx:",
+    "port": "Port:",
+    "select": "Select...",
+    "notification-for-fms-url": "Copy and paste this URL to FMS URL at encoder for example OBS.",
+    "copy": "Copy",
+    "service-settings": "Service settings",
+    "enable": "Enable",
+    "stream-key": "Stream key:",
+    "restart-nginx": "Restart nginx",
+    "notification-for-restart-nginx": "No effect without restart nginx."
+}

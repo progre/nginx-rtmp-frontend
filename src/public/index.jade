@@ -8,21 +8,21 @@ style.
   * {
     font-family: 'ヒラギノ角ゴ ProN W3', 'Hiragino Kaku Gothic ProN', '游ゴシック', YuGothic, 'メイリオ', Meiryo, sans-serif;
   }
-.container
+#root.container(style='display: none;')
   p
     fieldset
-      legend ローカル設定
+      legend.i18n-local-settings
       .row
         .col-sm-3.text-right
-          label.form-control-static(for='nginx-path') nginxのパス:
+          label.form-control-static.i18n-path-to-nginx(for='nginx-path')
         .col-sm-9
           .input-group
             input#nginx-path.form-control(type='text', style='width: 100%;')
             span.input-group-btn
-              button#select-button.btn.btn-secondary(type='button') 選択...
+              button#select-button.btn.btn-secondary.i18n-select(type='button')
       .row
         .col-sm-3.text-right
-          label.form-control-static(for='port') ポート:
+          label.form-control-static.i18n-port(for='port')
         .col-sm-2
           input#port.form-control(
             placeholder='1935', type='number', min='1', max='65535')
@@ -37,12 +37,11 @@ style.
             span.input-group-btn
               button.btn.btn-secondary(type='button')#copy
                 i.fa.fa-files-o
-                span(style='margin-left: 0.5em;') Copy
+                span.i18n-copy(style='margin-left: 0.5em;')
       .row
-        .col-sm-push-3.col-sm-9
-          | OBSなどのエンコーダーのFMS URLにこのURLを貼り付けてください
+        .col-sm-push-3.col-sm-9.i18n-notification-for-fms-url
     fieldset
-      legend サービス設定
+      legend.i18n-service-settings
       .row
         .col-sm-4.btn-group-vertical
           button.btn.btn-secondary#twitch-button
@@ -71,7 +70,7 @@ style.
               .checkbox
                 label
                   input(type='checkbox')#twitch-enabled
-                  span 有効
+                  span.i18n-enable
           .row
             .col-sm-3.text-right
               label.form-control-static(for='twitch-fms') FMS URL:
@@ -79,7 +78,7 @@ style.
               input.form-control(style='width: 100%', type='text')#twitch-fms
           .row
             .col-sm-3.text-right
-              label.form-control-static(for='twitch-key') 配信キー:
+              label.form-control-static.i18n-stream-key(for='twitch-key')
             .col-sm-9
               input.form-control(style='width: 100%', type='text')#twitch-key
         .col-sm-8(style='display: none;')#peercaststation-option
@@ -88,7 +87,7 @@ style.
               .checkbox
                 label
                   input(type='checkbox')#peercaststation-enabled
-                  span 有効
+                  span.i18n-enable
           .row
             .col-sm-3.text-right
               label.form-control-static(for='peercaststation-fms') FMS URL:
@@ -96,7 +95,7 @@ style.
               input.form-control(style='width: 100%', type='text')#peercaststation-fms
           .row
             .col-sm-3.text-right
-              label.form-control-static(for='peercaststation-key') 配信キー:
+              label.form-control-static.i18n-stream-key(for='peercaststation-key')
             .col-sm-9
               input.form-control(style='width: 100%', type='text')#peercaststation-key
         .col-sm-8(style='display: none;')#cavetube-option
@@ -105,7 +104,7 @@ style.
               .checkbox
                 label
                   input(type='checkbox')#cavetube-enabled
-                  span 有効
+                  span.i18n-enable
           .row
             .col-sm-3.text-right
               label.form-control-static(for='cavetube-fms') FMS URL:
@@ -113,7 +112,7 @@ style.
               input.form-control(style='width: 100%', type='text')#cavetube-fms
           .row
             .col-sm-3.text-right
-              label.form-control-static(for='cavetube-key') 配信キー:
+              label.form-control-static.i18n-stream-key(for='cavetube-key')
             .col-sm-9
               input.form-control(style='width: 100%', type='text')#cavetube-key
         .col-sm-8(style='display: none;')#livecodingtv-option
@@ -122,7 +121,7 @@ style.
               .checkbox
                 label
                   input(type='checkbox')#livecodingtv-enabled
-                  span 有効
+                  span.i18n-enable
           .row
             .col-sm-3.text-right
               label.form-control-static(for='livecodingtv-fms') FMS URL:
@@ -130,7 +129,7 @@ style.
               input.form-control(style='width: 100%', type='text')#livecodingtv-fms
           .row
             .col-sm-3.text-right
-              label.form-control-static(for='livecodingtv-key') 配信キー:
+              label.form-control-static.i18n-stream-key(for='livecodingtv-key')
             .col-sm-9
               input.form-control(style='width: 100%', type='text')#livecodingtv-key
         .col-sm-8(style='display: none;')#niconico-option
@@ -139,7 +138,7 @@ style.
               .checkbox
                 label
                   input(type='checkbox')#niconico-enabled
-                  span 有効
+                  span.i18n-enable
           .row
             .col-sm-3.text-right
               label.form-control-static(for='niconico-fms') FMS URL:
@@ -147,17 +146,18 @@ style.
               input.form-control(style='width: 100%', type='text')#niconico-fms
           .row
             .col-sm-3.text-right
-              label.form-control-static(for='niconico-key') 配信キー:
+              label.form-control-static.i18n-stream-key(for='niconico-key')
             .col-sm-9
               input.form-control(style='width: 100%', type='text')#niconico-key
   hr
   fieldset.text-right
     .row
       .col-sm-12
-        button.btn.btn-secondary(type='button')#restart-button nginxを再起動
+        button.btn.btn-secondary.i18n-restart-nginx(type='button')#restart-button
     .row
-      .col-sm-12(style='display: none;')#restart-message nginxを再起動するまで設定は反映されません
+      .col-sm-12(style='display: none;')#restart-message.i18n-notification-for-restart-nginx
 script.
   window.$ = window.jQuery = require('./js/vendor/jquery-2.1.4.min.js');
+  window.i18n = require('./js/vendor/i18next-1.11.1.min.js');
 script(src='js/vendor/bootstrap.min.js')
 script(src='js/app.js')

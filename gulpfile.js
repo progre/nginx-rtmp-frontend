@@ -34,7 +34,7 @@ gulp.task('ts', callback => {
 });
 
 gulp.task('watch', () => {
-    gulp.watch('src/**/*.js', ['copy:copy']);
+    gulp.watch(['src/**/*', '!**/tsconfig.json', '!**/*.*(jade|stylus|ts|tsx)'], ['copy:copy']);
     gulp.watch(['src/**/*.ts', '!src/test/'], ['ts']);
     gulp.watch('src/**/*.jade', ['jade:build']);
     gulp.watch('src/**/*.stylus', ['stylus:build']);
