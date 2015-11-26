@@ -10,22 +10,29 @@ export default class Nginx extends EventEmitter {
     private process: ChildProcess;
 
     start(exePath: string) {
-        logger.info('start server: ', exePath, '-c', repository.NGINX_CONFIG_PATH);
+        logger.info('Server starting: ', exePath, '-c', repository.NGINX_CONFIG_PATH);
         this.exePath = exePath;
         if (exePath == null || exePath.length === 0) {
             this.exePath = 'nginx';
         }
-        this.process = spawn(
+        let process = spawn(
             this.exePath,
             ['-c', repository.NGINX_CONFIG_PATH],
             { cwd: dirname(this.exePath) }
         );
-        this.process.on('close', () => {
-            logger.info('server closed');
+        process.on('error', (e: any) => {
+            logger.error('Server error', e);
+        });
+        process.on('close', () => {
+            logger.info('Server closed');
+            if (this.process === process) {
+                this.process = null;
+            }
             if (!this.isAlive) {
                 this.emit('close');
             }
         });
+        this.process = process;
     }
 
     restart() {
@@ -38,7 +45,6 @@ export default class Nginx extends EventEmitter {
             return;
         }
         this.process.kill();
-        this.process = null;
     }
 
     get isAlive() {
