@@ -8,8 +8,8 @@ cd $APP_NAME-win32-ia32
 zip -qry ../$APP_NAME-win.zip . -x '*.osx'
 cd ..
 rm -rf $APP_NAME-win32-ia32
-electron-packager dest/ $APP_NAME --platform=linux --arch=ia32 --version=$ELECTRON_VER
-cd $APP_NAME-linux-ia32
+electron-packager dest/ $APP_NAME --platform=linux --arch=x64 --version=$ELECTRON_VER
+cd $APP_NAME-linux-x64
 zip -qry ../$APP_NAME-linux.zip .
 cd ..
-rm -rf $APP_NAME-linux-ia32
+rm -rf $APP_NAME-linux-x64
