@@ -22,5 +22,6 @@ deploy:
   file:
     - $APP_NAME-osx.zip
     - $APP_NAME-win.zip
+  prerelease: true
   on:
     tags: true
