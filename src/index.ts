@@ -13,23 +13,8 @@ log4js.configure({
     }]
 });
 
-function main() {
-    var squirrelCommand = process.argv[1];
-    switch (squirrelCommand) {
-        case '--squirrel-install':
-        case '--squirrel-updated':
-            return;
-        case '--squirrel-uninstall':
-            return;
-        case '--squirrel-obsolete':
-            return;
-    }
-
-    Application.new()
-        .catch(e => {
-            log4js.getLogger().fatal(e);
-            app.quit();
-        });
-}
-
-main();
+Application.new()
+    .catch(e => {
+        log4js.getLogger().fatal(e);
+        app.quit();
+    });

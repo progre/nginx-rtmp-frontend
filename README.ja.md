@@ -3,7 +3,7 @@ nginx-rtmp-frontend
 
 [nginx-rtmp-module](https://github.com/arut/nginx-rtmp-module)のフロントエンドです。
 以下の機能があります：
-- [Twitch](http://www.twitch.tv/), [livecoding.tv](http://www.livecoding.tv/), [ニコニコ生放送](http://live.nicovideo.jp/), そして[PeerCastStation](http://www.pecastation.org/)など、簡単に配信先のサイトを切り替えられます。
+- [Twitch](http://www.twitch.tv/), [Livecoding.tv](http://www.livecoding.tv/), [ニコニコ生放送](http://live.nicovideo.jp/), そして[PeerCastStation](http://www.pecastation.org/)など、簡単に配信先のサイトを切り替えられます。
 - **複数のサービスに同時に配信ができます**。
 
 使い方
