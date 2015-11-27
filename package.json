@@ -5,6 +5,7 @@
   "main": "lib/index.js",
   "scripts": {
     "test": "gulp release-build-and-test",
+    "package": "node_modules/.bin/gulp copy-to-dest && APP_NAME=nginx-rtmp-frontend ELECTRON_VER=0.35.1 ./pack.sh",
     "release-it": "node_modules/.bin/release-it"
   },
   "private": true,
@@ -53,6 +54,7 @@
     "vinyl-source-stream": "^1.1.0"
   },
   "dependencies": {
+    "electron-packager": "^5.1.1",
     "log4js": "^0.6.28",
     "native-promisify": "^1.2.0",
     "nginx-conf": "^1.1.0"
