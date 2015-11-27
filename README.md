@@ -1,4 +1,4 @@
-nginx-rtmp-frontend
+nginx-rtmp-frontend [![Build Status](https://travis-ci.org/progre/nginx-rtmp-frontend.svg)](https://travis-ci.org/progre/nginx-rtmp-frontend)
 ====
 
 A frontend for [nginx-rtmp-module](https://github.com/arut/nginx-rtmp-module).
