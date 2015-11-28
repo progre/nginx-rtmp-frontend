@@ -1,9 +1,5 @@
 /// <reference path="./typings.d.ts" />
-const eRequire = require;
-const remote = eRequire('remote');
-const dialog: typeof GitHubElectron.Dialog = remote.require('dialog');
-import * as _os from 'os';
-const os: typeof _os = eRequire('os');
+import * as electron from 'electron';
 const SERVICES = ['twitch', 'peercaststation', 'cavetube', 'livecodingtv', 'niconico'];
 
 $(() => {
@@ -13,15 +9,11 @@ $(() => {
                 .split(' ')
                 .filter(x => x.indexOf('i18n-') === 0)[0]
                 .slice('i18n-'.length);
-                console.log(key)
             $(elem).text(i18n.t(key));
         });
         $('#root').fadeIn('fast');
     });
 
-    let mainProcess = remote.getGlobal('mainProcess');
-    let config = mainProcess.config;
-    let nginxConfig = mainProcess.nginxConfig;
     addEventListener('blur', () => {
         mainProcess.save();
     });
