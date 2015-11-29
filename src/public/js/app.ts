@@ -1,5 +1,5 @@
 /// <reference path="./typings.d.ts" />
-import * as electron from 'electron';
+import Server from './server';
 const SERVICES = ['twitch', 'peercaststation', 'cavetube', 'livecodingtv', 'niconico'];
 
 $(() => {
@@ -13,58 +13,52 @@ $(() => {
         });
         $('#root').fadeIn('fast');
     });
-
-    addEventListener('blur', () => {
-        mainProcess.save();
-    });
-    addEventListener('unload', () => {
-        mainProcess.save();
-    });
     $('#copy')
         .click(() => {
             $('#fms').select();
             document.execCommand('copy');
         });
+
+    let server = Server.create();
+    addEventListener('blur', () => {
+        server.save();
+    });
+    addEventListener('unload', () => {
+        server.save();
+    });
     $('#nginx-path')
-        .val(config.exePath)
+        .val(server.config.exePath)
         .change(function() {
-            config.exePath = $(this).val();
+            server.config.exePath = $(this).val();
             setActiveToRestartButton();
         });
-    let filters = os.platform() === 'win32'
-        ? [{ name: 'nginx.exe', extensions: ['exe'] }]
-        : [];
     $('#select-button')
         .click(() => {
-            dialog.showOpenDialog(
-                {
-                    filters
-                },
-                fileNames => {
-                    if (fileNames == null) {
+            server.showOpenDialog()
+                .then(fileName => {
+                    if (fileName == null) {
                         return;
                     }
-                    let fileName = fileNames[0];
-                    config.exePath = fileName;
+                    server.config.exePath = fileName;
                     setActiveToRestartButton();
                     $('#nginx-path').val(fileName);
                 });
         });
     $('#port')
-        .val(nginxConfig.port())
+        .val(server.nginxConfig.port())
         .change(function() {
             let port = $(this).val();
             if (port == null) {
                 port = 1935;
             }
-            nginxConfig.setPort(port);
+            server.nginxConfig.setPort(port);
             updateFms();
             setActiveToRestartButton();
         });
     SERVICES.forEach(x => {
         $(`#${x}-button`)
             .click(() => showOption(x));
-        let enabled = nginxConfig.enabled(x);
+        let enabled = server.nginxConfig.enabled(x);
         if (enabled) {
             $(`#${x}-check`).show();
         } else {
@@ -75,23 +69,23 @@ $(() => {
             .change(function() {
                 if ($(this).prop('checked')) {
                     $(`#${x}-check`).show();
-                    nginxConfig.enable(x);
+                    server.nginxConfig.enable(x);
                 } else {
                     $(`#${x}-check`).hide();
-                    nginxConfig.disable(x);
+                    server.nginxConfig.disable(x);
                 }
                 setActiveToRestartButton();
             });
         $(`#${x}-fms`)
-            .val(nginxConfig.fms(x))
+            .val(server.nginxConfig.fms(x))
             .change(function() {
-                nginxConfig.setFms(x, $(this).val());
+                server.nginxConfig.setFms(x, $(this).val());
                 setActiveToRestartButton();
             });
         $(`#${x}-key`)
-            .val(nginxConfig.key(x))
+            .val(server.nginxConfig.key(x))
             .change(function() {
-                nginxConfig.setKey(x, $(this).val());
+                server.nginxConfig.setKey(x, $(this).val());
                 setActiveToRestartButton();
             });
     });
@@ -101,7 +95,7 @@ $(() => {
                 .removeClass('btn-primary')
                 .addClass('btn-secondary');
             $('#restart-message').hide();
-            mainProcess.restart();
+            server.restart();
         });
     updateFms();
     showOption('twitch');

@@ -157,7 +157,22 @@ style.
     .row
       .col-sm-12(style='display: none;')#restart-message.i18n-notification-for-restart-nginx
 script.
-  window.$ = window.jQuery = require('./js/vendor/jquery-2.1.4.min.js');
-  window.i18n = require('./js/vendor/i18next-1.11.1.min.js');
-script(src='js/vendor/bootstrap.min.js')
-script(src='js/app.js')
+  open('./js/vendor/jquery-2.1.4.min.js', ['$', 'jQuery']);
+  open('./js/vendor/i18next-1.11.1.min.js', ['i18n']);
+  open('./js/vendor/bootstrap.min.js', []);
+  open('./js/app.js', []);
+
+  function open(url, keys) {
+    'use strict';
+    if (window.require != null) {
+      let v = require(url);
+      keys.forEach(key => {
+        window[key] = v;
+      });
+    } else {
+      var target = document.createElement('script');
+      target.charset = 'utf-8';
+      target.src = url;
+      document.body.appendChild(target);
+    }
+  }
