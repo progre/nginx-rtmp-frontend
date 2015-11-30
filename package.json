@@ -1,6 +1,6 @@
 {
   "name": "nginx-rtmp-frontend",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "A frontend for nginx-rtmp-module.",
   "main": "lib/index.js",
   "scripts": {
@@ -14,7 +14,8 @@
     "url": "https://github.com/progre/nginx-rtmp-frontend.git"
   },
   "keywords": [
-    "electron"
+    "electron",
+    "nginx"
   ],
   "author": "progre",
   "license": "MIT",
