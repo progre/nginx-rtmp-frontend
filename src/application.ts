@@ -1,12 +1,13 @@
 const app = require('app');
 const BrowserWindow = require('browser-window');
+import * as log4js from 'log4js';
+const logger = log4js.getLogger();
 import TrayIcon from './ui/trayicon';
 import {createMainWindow} from './ui/windowfactory';
 import Nginx from './service/nginx';
 import {default as Repository, Config} from './service/repository';
 import NginxConfig from './service/nginxconfig';
-import * as log4js from 'log4js';
-const logger = log4js.getLogger();
+const fetch = require('node-fetch');
 
 export default class Application {
     private nginx = new Nginx();
@@ -14,7 +15,7 @@ export default class Application {
     private mainWindow: GitHubElectron.BrowserWindow = null;
 
     static async new() {
-        let [, [repository, config, nginxConfig]] = await Promise.all<any>([
+        let [, [repository, config, nginxConfig], ingests] = await Promise.all<any>([
             new Promise((resolve, reject) => app.once('ready', resolve))
                 .then(() => keepAlive()),
             Repository.new()
@@ -22,9 +23,12 @@ export default class Application {
                     repository,
                     repository.getConfig(),
                     repository.nginxConfig
-                ]))
+                ])),
+            fetch('https://api.twitch.tv/kraken/ingests')
+                .then((res: any) => res.json())
+                .then((json: any) => json.ingests)
         ]);
-        let instance = new Application(repository, config, nginxConfig);
+        let instance = new Application(repository, config, nginxConfig, ingests);
         if (repository == null || config == null || nginxConfig == null) {
             instance.showMainWindow();
             return instance;
@@ -36,7 +40,8 @@ export default class Application {
     constructor(
         private repository: Repository,
         private config: Config,
-        private nginxConfig: NginxConfig
+        private nginxConfig: NginxConfig,
+        ingests: any
     ) {
         this.nginx.on('close', () => {
             this.trayIcon.running = false;
@@ -67,6 +72,7 @@ export default class Application {
                 enable(service: string) { nginxConfig.enable(service); },
                 disable(service: string) { nginxConfig.disable(service); }
             },
+            ingests,
             save() {
                 Promise.all([
                     repository.setConfig(config),

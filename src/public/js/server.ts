@@ -8,6 +8,7 @@ export default class Server {
     private mainProcess = this.remote.getGlobal('mainProcess');
     config = this.mainProcess.config;
     nginxConfig = this.mainProcess.nginxConfig;
+    ingests: any[] = this.mainProcess.ingests;
 
     static create() {
         if ((<any>window).process == null) {
@@ -19,6 +20,13 @@ export default class Server {
                     fms() { }, setFms() { },
                     key() { }, setKey() { }
                 },
+                ingests: [{
+                    name: 'Asia: Tokyo, Japan',
+                    availability: 1,
+                    _id: 65,
+                    default: false,
+                    url_template: 'rtmp://live-tyo.twitch.tv/app/{stream_key}'
+                }],
                 showOpenDialog() { },
                 save() { },
                 restart() { }
