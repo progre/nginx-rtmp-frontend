@@ -20,6 +20,10 @@ export default class Repository {
     constructor(public nginxConfig: NginxConfig) {
     }
 
+    release() {
+        this.nginxConfig.release();
+    }
+
     async getConfig() {
         try {
             let data = await readFile(CONFIG_PATH, 'ascii');

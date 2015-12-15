@@ -43,6 +43,9 @@ export default class Application {
         private nginxConfig: NginxConfig,
         ingests: any
     ) {
+        app.addListener('quit', () => {
+            this.release();
+        });
         this.nginx.on('close', () => {
             this.trayIcon.running = false;
         });
@@ -86,6 +89,10 @@ export default class Application {
                 self.startServer();
             }
         };
+    }
+
+    release() {
+        this.repository.release();
     }
 
     private showMainWindow() {

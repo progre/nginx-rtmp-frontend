@@ -20,12 +20,16 @@ export default class NginxConfig {
                     .once('error', reject)
                     .once('close', resolve));
         }
-        return new this(await create(configPath));
+        return new this(configPath, await create(configPath));
     }
 
-    constructor(private conf: any) {
+    constructor(private configPath: string, private conf: any) {
         this.enabledServices = new EnabledServices(conf.nginx.rtmp.server.application);
         this.disabledServices = new DisabledServices(conf.nginx.rtmp._comments);
+    }
+
+    release() {
+        this.conf.die(this.configPath);
     }
 
     get port() {
