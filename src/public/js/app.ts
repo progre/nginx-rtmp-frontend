@@ -1,6 +1,6 @@
 /// <reference path="./typings.d.ts" />
 import Server from './server';
-const SERVICES = ['twitch', 'peercaststation', 'cavetube', 'livecodingtv', 'niconico'];
+const SERVICES = ['twitch', 'peercaststation', 'cavetube', 'livecodingtv', 'niconico', 'other'];
 
 new Promise(
     (resolve, reject) =>

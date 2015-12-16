@@ -64,6 +64,10 @@ style.
             span.pull-left niconico
             span.pull-right
               i.fa.fa-check#niconico-check
+          button.btn.btn-secondary.text-left#other-button
+            span.pull-left Other
+            span.pull-right
+              i.fa.fa-check#other-check
         .col-sm-8(style='display: none;')#twitch-option
           .row
             .col-sm-push-3.col-sm-9
@@ -158,6 +162,23 @@ style.
           .row(style='margin-top: 1em;')
             .col-sm-12.text-right
               a(href='http://live.nicovideo.jp/') http://live.nicovideo.jp/
+        .col-sm-8(style='display: none;')#other-option
+          .row
+            .col-sm-push-3.col-sm-9
+              .checkbox
+                label
+                  input(type='checkbox')#other-enabled
+                  span.i18n-enable
+          .row
+            .col-sm-3.text-right
+              label.form-control-static(for='other-fms') FMS URL:
+            .col-sm-9
+              input.form-control(style='width: 100%', type='text')#other-fms
+          .row
+            .col-sm-3.text-right
+              label.form-control-static.i18n-stream-key(for='other-key')
+            .col-sm-9
+              input.form-control(style='width: 100%', type='text')#other-key
   hr
   fieldset.text-right
     .row
