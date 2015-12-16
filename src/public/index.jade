@@ -52,10 +52,10 @@ style.
             span.pull-left PeerCastStation
             span.pull-right
               i.fa.fa-check#peercaststation-check
-          button.btn.btn-secondary.text-left#cavetube-button
-            span.pull-left CaveTube
-            span.pull-right
-              i.fa.fa-check#cavetube-check
+          //- button.btn.btn-secondary.text-left#cavetube-button
+          //-   span.pull-left CaveTube
+          //-   span.pull-right
+          //-     i.fa.fa-check#cavetube-check
           button.btn.btn-secondary.text-left#livecodingtv-button
             span.pull-left Livecoding.tv
             span.pull-right
@@ -94,27 +94,25 @@ style.
             .col-sm-9
               input.form-control(style='width: 100%', type='text')#peercaststation-fms
           .row
-            .col-sm-3.text-right
-              label.form-control-static.i18n-stream-key(for='peercaststation-key')
-            .col-sm-9
-              input.form-control(style='width: 100%', type='text')#peercaststation-key
-        .col-sm-8(style='display: none;')#cavetube-option
-          .row
             .col-sm-push-3.col-sm-9
-              .checkbox
-                label
-                  input(type='checkbox')#cavetube-enabled
-                  span.i18n-enable
-          .row
-            .col-sm-3.text-right
-              label.form-control-static(for='cavetube-fms') FMS URL:
-            .col-sm-9
-              input.form-control(style='width: 100%', type='text')#cavetube-fms
-          .row
-            .col-sm-3.text-right
-              label.form-control-static.i18n-stream-key(for='cavetube-key')
-            .col-sm-9
-              input.form-control(style='width: 100%', type='text')#cavetube-key
+              p.i18n-notification-for-peercaststation
+        //- .col-sm-8(style='display: none;')#cavetube-option
+        //-   .row
+        //-     .col-sm-push-3.col-sm-9
+        //-       .checkbox
+        //-         label
+        //-           input(type='checkbox')#cavetube-enabled
+        //-           span.i18n-enable
+        //-   .row
+        //-     .col-sm-3.text-right
+        //-       label.form-control-static(for='cavetube-fms') FMS URL:
+        //-     .col-sm-9
+        //-       input.form-control(style='width: 100%', type='text')#cavetube-fms
+        //-   .row
+        //-     .col-sm-3.text-right
+        //-       label.form-control-static.i18n-stream-key(for='cavetube-key')
+        //-     .col-sm-9
+        //-       input.form-control(style='width: 100%', type='text')#cavetube-key
         .col-sm-8(style='display: none;')#livecodingtv-option
           .row
             .col-sm-push-3.col-sm-9

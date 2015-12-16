@@ -8,6 +8,7 @@
     "service-settings": "Service settings",
     "enable": "Enable",
     "stream-key": "Stream key:",
+    "notification-for-peercaststation": "When broadcast from locally, set rtmp://127.0.0.1:1944/live and set same value to Stream URL at PeerCastStation.",
     "restart-nginx": "Restart nginx",
     "notification-for-restart-nginx": "No effect without restart nginx."
 }
