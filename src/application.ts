@@ -1,5 +1,6 @@
 const app = require('app');
 const BrowserWindow = require('browser-window');
+import {visitor} from './service/gafactory';
 import * as log4js from 'log4js';
 const logger = log4js.getLogger();
 import TrayIcon from './ui/trayicon';
@@ -8,6 +9,8 @@ import Nginx from './service/nginx';
 import {default as Repository, Config} from './service/repository';
 import NginxConfig from './service/nginxconfig';
 const fetch = require('node-fetch');
+
+const SERVICES = ['twitch', 'peercaststation', 'cavetube', 'livecodingtv', 'niconico', 'other'];
 
 export default class Application {
     private nginx = new Nginx();
@@ -43,22 +46,27 @@ export default class Application {
         private nginxConfig: NginxConfig,
         ingests: any
     ) {
+        visitor.pageview('/').send();
+
         app.addListener('quit', () => {
             this.release();
         });
         this.nginx.on('close', () => {
             this.trayIcon.running = false;
+            visitor.event('ui', 'close').send();
         });
         this.trayIcon.on('quit', () => {
             app.quit();
         });
         this.trayIcon.on('config', () => {
             this.showMainWindow();
+            visitor.event('ui', 'config').send();
         });
         this.trayIcon.on('click', () => {
             if (this.mainWindow != null) {
                 this.showMainWindow();
             }
+            visitor.event('ui', 'click').send();
         });
 
         let self = this;
@@ -83,10 +91,14 @@ export default class Application {
                 ]).catch(e => {
                     logger.error(e);
                 });
+                visitor.event('ui', 'save').send();
             },
             restart() {
                 self.stopServer();
                 self.startServer();
+                visitor
+                    .event('ui', 'restart', broadcastingServices(nginxConfig).join(', '))
+                    .send();
             }
         };
     }
@@ -121,4 +133,8 @@ export default class Application {
 
 function keepAlive() {
     new BrowserWindow({ width: 0, height: 0, show: false });
+}
+
+function broadcastingServices(nginxConfig: NginxConfig) {
+    return SERVICES.filter(x => nginxConfig.enabled(x));
 }

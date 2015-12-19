@@ -2,7 +2,7 @@
     "compilerOptions": {
         "noImplicitAny": true,
         "noEmitOnError": true,
-        "target": "ES5",
+        "target": "es5",
         "module": "umd"
     }
 }

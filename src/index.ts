@@ -3,6 +3,7 @@
 try { require('source-map-support').install(); } catch (e) { /* empty */ }
 require('crash-reporter').start();
 import * as app from 'app';
+import {visitor} from './service/gafactory';
 import * as log4js from 'log4js';
 import Application from './application';
 
@@ -16,5 +17,6 @@ log4js.configure({
 Application.new()
     .catch(e => {
         log4js.getLogger().fatal(e);
+        visitor.exception(e).send();
         app.quit();
     });
