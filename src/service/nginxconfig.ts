@@ -175,6 +175,9 @@ class EnabledServices {
         return this.getPushList()
             .map((x, index) => {
                 let [fms, key] = (<string>x._value).split(' ');
+                if (key == null) {
+                    key = '';
+                }
                 return <Service>{
                     index,
                     service: x._comments[0],

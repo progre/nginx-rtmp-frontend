@@ -66,9 +66,13 @@ new Promise(
             server.ingests
                 .sort((a, b) =>
                     a.name === b.name ? 0 : a.name < b.name ? -1 : 1)
+                .map(x => ({
+                    name: x.name,
+                    url: (<string>x.url_template).replace('/{stream_key}', '')
+                }))
                 .map(x =>
                     $('<option>')
-                        .val((<string>x.url_template).replace('/{stream_key}', ''))
+                        .val(x.url)
                         .text(x.name)));
         SERVICES.forEach(x => {
             $(`#${x}-button`)
