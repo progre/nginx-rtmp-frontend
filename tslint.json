@@ -69,7 +69,7 @@
         ],
         "quotemark": [
             true,
-            "single"
+            "double"
         ],
         "radix": true,
         "semicolon": true,
