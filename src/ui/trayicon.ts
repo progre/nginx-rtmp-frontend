@@ -1,9 +1,9 @@
-import * as log4js from 'log4js';
+import * as log4js from "log4js";
 const logger = log4js.getLogger();
-const Tray = require('tray');
-const Menu = require('menu');
-import * as path from 'path';
-import {EventEmitter} from 'events';
+const Tray = require("tray");
+const Menu = require("menu");
+import * as path from "path";
+import {EventEmitter} from "events";
 
 export default class TrayIcon extends EventEmitter {
     private tray = createTray();
@@ -12,7 +12,7 @@ export default class TrayIcon extends EventEmitter {
         super();
 
         this.tray.setContextMenu(this.createMenu(false));
-        this.tray.on('click', () => this.emit('click'));
+        this.tray.on("click", () => this.emit("click"));
     }
 
     set running(value: boolean) {
@@ -22,25 +22,25 @@ export default class TrayIcon extends EventEmitter {
     private createMenu(running: boolean) {
         return Menu.buildFromTemplate([
             {
-                label: running ? 'nginx 実行中' : 'nginx 停止中',
+                label: running ? "nginx 実行中" : "nginx 停止中",
                 enabled: false
             },
-            { type: 'separator' },
+            { type: "separator" },
             {
-                label: '設定', click: () => this.emit('config')
+                label: "設定", click: () => this.emit("config")
             },
             {
-                label: '終了', click: () => this.emit('quit')
+                label: "終了", click: () => this.emit("quit")
             }
         ]);
     }
 }
 
 function createTray() {
-    let resourcePath = path.normalize(__dirname + '/../res');
-    let tray = new Tray(process.platform === 'darwin'
-        ? resourcePath + '/icon_16px@3x.png'
-        : resourcePath + '/icon_192px.png');
-    tray.setToolTip('nginx-rtmp-frontend');
+    let resourcePath = path.normalize(__dirname + "/../res");
+    let tray = new Tray(process.platform === "darwin"
+        ? resourcePath + "/icon_16px@3x.png"
+        : resourcePath + "/icon_192px.png");
+    tray.setToolTip("nginx-rtmp-frontend");
     return tray;
 }

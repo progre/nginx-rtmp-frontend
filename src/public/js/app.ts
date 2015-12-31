@@ -3,7 +3,6 @@ import Server from "./server";
 const eRequire = require;
 const remote = eRequire("electron").remote;
 const Menu: typeof GitHubElectron.Menu = remote.Menu;
-const MenuItem: typeof GitHubElectron.MenuItem = remote.MenuItem;
 const SERVICES = ["twitch", "peercaststation", "cavetube", "livecodingtv", "niconico", "other"];
 
 new Promise(
@@ -32,7 +31,7 @@ new Promise(
     });
 
 function initContextMenu() {
-    var menu = Menu.buildFromTemplate(<any[]>[
+    let menu = Menu.buildFromTemplate(<any[]>[
         {
             label: "Copy",
             accelerator: "CmdOrCtrl+C",
@@ -54,10 +53,13 @@ function initContextMenu() {
             role: "selectall"
         }
     ]);
-    window.addEventListener("contextmenu", e => {
-        e.preventDefault();
-        menu.popup(remote.getCurrentWindow());
-    }, false);
+    window.addEventListener(
+        "contextmenu",
+        e => {
+            e.preventDefault();
+            menu.popup(remote.getCurrentWindow());
+        },
+        false);
 }
 
 function initUI() {

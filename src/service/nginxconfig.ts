@@ -1,8 +1,8 @@
-import * as fs from 'fs';
-import * as log4js from 'log4js';
+import * as fs from "fs";
+import * as log4js from "log4js";
 const logger = log4js.getLogger();
-import promisify from 'native-promisify';
-const NginxConfFile = require('nginx-conf').NginxConfFile;
+import promisify from "native-promisify";
+const NginxConfFile = require("nginx-conf").NginxConfFile;
 const create = promisify(NginxConfFile.create);
 
 const exists = (path: string) =>
@@ -17,8 +17,8 @@ export default class NginxConfig {
             await new Promise((resolve, reject) =>
                 fs.createReadStream(configTemplatePath)
                     .pipe(fs.createWriteStream(configPath))
-                    .once('error', reject)
-                    .once('close', resolve));
+                    .once("error", reject)
+                    .once("close", resolve));
         }
         return new this(configPath, await create(configPath));
     }
@@ -63,7 +63,7 @@ export default class NginxConfig {
             this.disabledServices.update(d, { fms });
             return;
         }
-        this.disabledServices.add({ service, fms, key: '' });
+        this.disabledServices.add({ service, fms, key: "" });
     }
 
     key(service: string) {
@@ -89,7 +89,7 @@ export default class NginxConfig {
             this.disabledServices.update(d, { key });
             return;
         }
-        this.disabledServices.add({ service, fms: '', key });
+        this.disabledServices.add({ service, fms: "", key });
     }
 
     enabled(service: string) {
@@ -102,7 +102,7 @@ export default class NginxConfig {
             this.disabledServices.remove(item);
             this.enabledServices.add(item);
         } else {
-            this.enabledServices.add({ service, fms: '', key: '' });
+            this.enabledServices.add({ service, fms: "", key: "" });
         }
     }
 
@@ -150,8 +150,8 @@ class EnabledServices {
 
     update(item: Service, data: { fms?: string, key?: string }) {
         let i = this.getPushList()[item.index];
-        let [fms, key] = i._value.split(' ');
-        key = key.replace(/^playpath=/, '');
+        let [fms, key] = i._value.split(" ");
+        key = key.replace(/^playpath=/, "");
         if (data.fms != null) {
             fms = data.fms;
         }
@@ -162,27 +162,27 @@ class EnabledServices {
     }
 
     add(item: { service: string, fms: string, key: string }) {
-        this.container._add('push', `${item.fms} playpath=${item.key}`);
+        this.container._add("push", `${item.fms} playpath=${item.key}`);
         let list = this.getPushList();
         list[list.length - 1]._comments.push(item.service);
     }
 
     remove(item: Service) {
-        this.container._remove('push', item.index);
+        this.container._remove("push", item.index);
     }
 
     private items() {
         return this.getPushList()
             .map((x, index) => {
-                let [fms, key] = (<string>x._value).split(' ');
+                let [fms, key] = (<string>x._value).split(" ");
                 if (key == null) {
-                    key = '';
+                    key = "";
                 }
                 return <Service>{
                     index,
                     service: x._comments[0],
                     fms,
-                    key: key.replace(/^playpath=/, '')
+                    key: key.replace(/^playpath=/, "")
                 };
             });
     }
@@ -213,8 +213,8 @@ class DisabledServices {
     }
 
     update(item: Service, data: { fms?: string, key?: string }) {
-        let [service, fms, key] = this.container[item.index].split(' ');
-        key = key.replace(/^playpath=/, '');
+        let [service, fms, key] = this.container[item.index].split(" ");
+        key = key.replace(/^playpath=/, "");
         if (data.fms != null) {
             fms = data.fms;
         }
@@ -235,12 +235,12 @@ class DisabledServices {
     private items() {
         return this.container
             .map((x, index) => {
-                let [service, fms, key] = x.split(' ');
+                let [service, fms, key] = x.split(" ");
                 return <Service>{
                     index,
                     service,
                     fms,
-                    key: key.replace(/^playpath=/, '')
+                    key: key.replace(/^playpath=/, "")
                 };
             });
     }

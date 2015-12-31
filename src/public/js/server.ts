@@ -1,11 +1,11 @@
-import * as _os from 'os';
+import * as _os from "os";
 const eRequire = require;
 
 export default class Server {
-    private os: typeof _os = eRequire('os');
-    private remote = eRequire('remote');
-    private dialog: typeof GitHubElectron.Dialog = this.remote.require('dialog');
-    private mainProcess = this.remote.getGlobal('mainProcess');
+    private os: typeof _os = eRequire("os");
+    private remote = eRequire("remote");
+    private dialog: typeof GitHubElectron.Dialog = this.remote.require("dialog");
+    private mainProcess = this.remote.getGlobal("mainProcess");
     config = this.mainProcess.config;
     nginxConfig = this.mainProcess.nginxConfig;
     ingests: any[] = this.mainProcess.ingests;
@@ -21,11 +21,11 @@ export default class Server {
                     key() { }, setKey() { }
                 },
                 ingests: [{
-                    name: 'Asia: Tokyo, Japan',
+                    name: "Asia: Tokyo, Japan",
                     availability: 1,
                     _id: 65,
                     default: false,
-                    url_template: 'rtmp://live-tyo.twitch.tv/app/{stream_key}'
+                    url_template: "rtmp://live-tyo.twitch.tv/app/{stream_key}"
                 }],
                 showOpenDialog() { },
                 save() { },
@@ -37,8 +37,8 @@ export default class Server {
 
     showOpenDialog() {
         return new Promise<string>((resolve, reject) => {
-            let filters = this.os.platform() === 'win32'
-                ? [{ name: 'nginx.exe', extensions: ['exe'] }]
+            let filters = this.os.platform() === "win32"
+                ? [{ name: "nginx.exe", extensions: ["exe"] }]
                 : [];
             this.dialog.showOpenDialog(
                 { filters },

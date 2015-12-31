@@ -1,16 +1,16 @@
-const app = require('app');
-import * as log4js from 'log4js';
+const app = require("app");
+import * as log4js from "log4js";
 const logger = log4js.getLogger();
-import promisify from 'native-promisify';
-import * as fs from 'fs';
+import promisify from "native-promisify";
+import * as fs from "fs";
 const readFile = promisify(fs.readFile);
 const writeFile = promisify(fs.writeFile);
-import {normalize} from 'path';
-import NginxConfig from './nginxconfig';
+import {normalize} from "path";
+import NginxConfig from "./nginxconfig";
 
-const CONFIG_PATH = app.getPath('userData') + '/' + 'config.json';
-export const NGINX_CONFIG_PATH = app.getPath('userData') + '/' + 'nginx.conf';
-const NGINX_CONFIG_TEMPLATE_PATH = normalize(__dirname + '/../res/nginx-default.conf');
+const CONFIG_PATH = app.getPath("userData") + "/" + "config.json";
+export const NGINX_CONFIG_PATH = app.getPath("userData") + "/" + "nginx.conf";
+const NGINX_CONFIG_TEMPLATE_PATH = normalize(__dirname + "/../res/nginx-default.conf");
 
 export default class Repository {
     static async new() {
@@ -26,17 +26,17 @@ export default class Repository {
 
     async getConfig() {
         try {
-            let data = await readFile(CONFIG_PATH, 'ascii');
+            let data = await readFile(CONFIG_PATH, "ascii");
             return <Config>JSON.parse(data);
         } catch (e) {
             return <Config>{
-                exePath: ''
+                exePath: ""
             };
         }
     }
 
     setConfig(config: Config) {
-        return writeFile(CONFIG_PATH, JSON.stringify(config), { encoding: 'ascii', flag: 'w+' });
+        return writeFile(CONFIG_PATH, JSON.stringify(config), { encoding: "ascii", flag: "w+" });
     }
 }
 
