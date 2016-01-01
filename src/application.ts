@@ -5,6 +5,7 @@ import * as log4js from "log4js";
 const logger = log4js.getLogger();
 import TrayIcon from "./ui/trayicon";
 import {createMainWindow} from "./ui/windowfactory";
+import {initMenu} from "./ui/appmenu";
 import Nginx from "./service/nginx";
 import {default as Repository, Config} from "./service/repository";
 import NginxConfig from "./service/nginxconfig";
@@ -47,6 +48,8 @@ export default class Application {
         ingests: any
     ) {
         visitor.pageview("/").send();
+
+        initMenu();
 
         app.addListener("quit", () => {
             this.release();

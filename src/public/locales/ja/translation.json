@@ -8,7 +8,7 @@
     "service-settings": "サービス設定",
     "enable": "有効",
     "stream-key": "配信キー:",
-    "notification-for-peercaststation": "ローカル配信の場合は rtmp://127.0.0.1:1944/live とし、PeerCastStationのストリームURLにも同じ値を設定してください。",
+    "notification-for-peercaststation": "ローカル配信の場合は <span class=\"selectable\">rtmp://127.0.0.1:1944/live</span> とし、PeerCastStationのストリームURLにも同じ値を設定してください。",
     "restart-nginx": "nginxを再起動",
     "notification-for-restart-nginx": "nginxを再起動するまで設定は反映されません"
 }

@@ -18,19 +18,19 @@ new Promise(
                         .split(" ")
                         .filter(x => x.indexOf("i18n-") === 0)[0]
                         .slice("i18n-".length);
-                    $(elem).text(i18n.t(key));
+                    $(elem).html(i18n.t(key));
                 });
             })
     ]))
     .then(() => {
-        initContextMenu();
+        initShortcutKey();
         initUI();
     })
     .catch(e => {
         console.error(e);
     });
 
-function initContextMenu() {
+function initShortcutKey() {
     let menu = Menu.buildFromTemplate(<any[]>[
         {
             label: "Copy",
