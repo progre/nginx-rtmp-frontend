@@ -2,6 +2,9 @@ const Menu = require("menu");
 const app = require("app");
 
 export function initMenu() {
+    if (process.platform !== "darwin") {
+        return;
+    }
     let template = [{
         label: "Edit",
         submenu: <any[]>[
@@ -41,51 +44,49 @@ export function initMenu() {
         ]
     }];
 
-    if (process.platform === "darwin") {
-        let name = app.getName();
-        template.unshift({
-            label: name,
-            submenu: [
-                {
-                    label: "About " + name,
-                    role: "about"
-                },
-                {
-                    type: "separator"
-                },
-                {
-                    label: "Services",
-                    role: "services",
-                    submenu: []
-                },
-                {
-                    type: "separator"
-                },
-                {
-                    label: "Hide " + name,
-                    accelerator: "Command+H",
-                    role: "hide"
-                },
-                {
-                    label: "Hide Others",
-                    accelerator: "Command+Shift+H",
-                    role: "hideothers"
-                },
-                {
-                    label: "Show All",
-                    role: "unhide"
-                },
-                {
-                    type: "separator"
-                },
-                {
-                    label: "Quit",
-                    accelerator: "Command+Q",
-                    click: () => app.quit()
-                },
-            ]
-        });
-    }
+    let name = app.getName();
+    template.unshift({
+        label: name,
+        submenu: [
+            {
+                label: "About " + name,
+                role: "about"
+            },
+            {
+                type: "separator"
+            },
+            {
+                label: "Services",
+                role: "services",
+                submenu: []
+            },
+            {
+                type: "separator"
+            },
+            {
+                label: "Hide " + name,
+                accelerator: "Command+H",
+                role: "hide"
+            },
+            {
+                label: "Hide Others",
+                accelerator: "Command+Shift+H",
+                role: "hideothers"
+            },
+            {
+                label: "Show All",
+                role: "unhide"
+            },
+            {
+                type: "separator"
+            },
+            {
+                label: "Quit",
+                accelerator: "Command+Q",
+                click: () => app.quit()
+            },
+        ]
+    });
 
     Menu.setApplicationMenu(Menu.buildFromTemplate(template));
 }
