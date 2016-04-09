@@ -1,7 +1,7 @@
-/// <reference path="./typings.d.ts" />
+/// <reference path="../typings/main.d.ts" />
 try { require("source-map-support").install(); } catch (e) { /* empty */ }
 require("crash-reporter").start();
-import * as app from "app";
+const app: any = require("app");
 import {visitor} from "./service/gafactory";
 import * as log4js from "log4js";
 import Application from "./application";

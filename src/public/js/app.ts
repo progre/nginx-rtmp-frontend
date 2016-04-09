@@ -1,9 +1,10 @@
-/// <reference path="./typings.d.ts" />
+/// <reference path="../../../typings/browser.d.ts" />
 import Server from "./server";
 const eRequire = require;
 const remote = eRequire("electron").remote;
-const Menu: typeof GitHubElectron.Menu = remote.Menu;
+const Menu = remote.Menu;
 const SERVICES = ["twitch", "peercaststation", "cavetube", "livecodingtv", "niconico", "other"];
+declare const i18n: I18next.I18n;
 
 new Promise(
     (resolve, reject) =>

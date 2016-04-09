@@ -16,7 +16,7 @@ const SERVICES = ["twitch", "peercaststation", "cavetube", "livecodingtv", "nico
 export default class Application {
     private nginx = new Nginx();
     private trayIcon = new TrayIcon();
-    private mainWindow: GitHubElectron.BrowserWindow = null;
+    private mainWindow: Electron.BrowserWindow = null;
 
     static async new() {
         let [, [repository, config, nginxConfig], ingests] = await Promise.all<any>([

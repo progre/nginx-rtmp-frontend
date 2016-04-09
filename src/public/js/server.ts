@@ -1,10 +1,10 @@
-import * as _os from "os";
+//import * as _os from "os";
 const eRequire = require;
 
 export default class Server {
-    private os: typeof _os = eRequire("os");
+    private os: any = eRequire("os");
     private remote = eRequire("remote");
-    private dialog: typeof GitHubElectron.Dialog = this.remote.require("dialog");
+    private dialog: Electron.Dialog = this.remote.require("dialog");
     private mainProcess = this.remote.getGlobal("mainProcess");
     config = this.mainProcess.config;
     nginxConfig = this.mainProcess.nginxConfig;

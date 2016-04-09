@@ -1,7 +1,7 @@
 import * as fs from "fs";
 import * as log4js from "log4js";
 const logger = log4js.getLogger();
-import promisify from "native-promisify";
+import * as promisify from "native-promisify";
 const NginxConfFile = require("nginx-conf").NginxConfFile;
 const create = promisify(NginxConfFile.create);
 
