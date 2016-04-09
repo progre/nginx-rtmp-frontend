@@ -1,28 +1,18 @@
 {
   "name": "nginx-rtmp-frontend",
-  "version": "0.2.5",
   "description": "A frontend for nginx-rtmp-module.",
-  "main": "lib/index.js",
-  "scripts": {
-    "test": "gulp release-build-and-test",
-    "package": "node_modules/.bin/gulp package",
-    "release-it": "node_modules/.bin/release-it"
-  },
-  "private": true,
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/progre/nginx-rtmp-frontend.git"
-  },
-  "keywords": [
-    "electron",
-    "nginx"
-  ],
+  "version": "0.2.5",
   "author": "progre",
-  "license": "MIT",
   "bugs": {
     "url": "https://github.com/progre/nginx-rtmp-frontend/issues"
   },
-  "homepage": "https://github.com/progre/nginx-rtmp-frontend",
+  "dependencies": {
+    "log4js": "^0.6.28",
+    "native-promisify": "^1.2.0",
+    "nginx-conf": "^1.1.0",
+    "node-fetch": "^1.3.3",
+    "universal-analytics": "^0.3.10"
+  },
   "devDependencies": {
     "babel-preset-es2015": "^6.1.18",
     "babelify": "^7.2.0",
@@ -55,11 +45,21 @@
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0"
   },
-  "dependencies": {
-    "log4js": "^0.6.28",
-    "native-promisify": "^1.2.0",
-    "nginx-conf": "^1.1.0",
-    "node-fetch": "^1.3.3",
-    "universal-analytics": "^0.3.10"
+  "homepage": "https://github.com/progre/nginx-rtmp-frontend",
+  "keywords": [
+    "electron",
+    "nginx"
+  ],
+  "license": "MIT",
+  "main": "lib/index.js",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/progre/nginx-rtmp-frontend.git"
+  },
+  "scripts": {
+    "package": "node_modules/.bin/gulp package",
+    "release-it": "node_modules/.bin/release-it",
+    "test": "gulp release-build-and-test"
   }
 }
