@@ -1,5 +1,7 @@
-dest/
-installer32/
+dest
+installer32
+lib
 nginx-rtmp-frontend-*/
-lib/
-node_modules/
+node_modules
+tmp
+typings/DefinitelyTyped/

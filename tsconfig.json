@@ -1,10 +1,13 @@
 {
     "compilerOptions": {
+        "module": "commonjs",
         "noImplicitAny": true,
         "noEmitOnError": true,
-        "target": "es6"
+        "target": "es2015"
     },
-    "files": [
-        "src/index.ts"
+    "exclude": [
+        "lib",
+        "node_modules",
+        "typings"
     ]
 }
