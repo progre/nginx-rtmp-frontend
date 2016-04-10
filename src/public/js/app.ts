@@ -1,10 +1,14 @@
 /// <reference path="../../../typings/browser.d.ts" />
+import * as i18n from "i18next";
+const XHR = require("i18next-xhr-backend");
+const Cache = require("i18next-localstorage-cache");
+import * as sprintf from "i18next-sprintf-postprocessor";
+const LanguageDetector = require("i18next-browser-languagedetector");
 import Server from "./server";
 const eRequire = require;
 const remote = eRequire("electron").remote;
 const Menu = remote.Menu;
 const SERVICES = ["twitch", "peercaststation", "cavetube", "livecodingtv", "niconico", "other"];
-declare const i18n: I18next.I18n;
 
 new Promise(
     (resolve, reject) =>
@@ -12,13 +16,24 @@ new Promise(
     .then(() => Promise.all<any>([
         new Promise(
             (resolve, reject) =>
-                i18n.init({ lng: navigator.language }, resolve))
+                i18n.use(XHR)
+                    .use(Cache)
+                    .use(LanguageDetector)
+                    .use(sprintf)
+                    .init({
+                        backend: {
+                            loadPath: "./locales/{{lng}}/{{ns}}.json"
+                        },
+                        lng: navigator.language
+                     }, resolve))
             .then(() => {
+                console.log("i18n begin");
                 $("[class*=i18n-]").each((i, elem) => {
                     let key = elem.className
                         .split(" ")
                         .filter(x => x.indexOf("i18n-") === 0)[0]
                         .slice("i18n-".length);
+                    console.log(key, i18n.t(key));
                     $(elem).html(i18n.t(key));
                 });
             })

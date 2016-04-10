@@ -1,13 +1,13 @@
 const eRequire = require;
+const os = eRequire("os");
+const remote = eRequire("remote");
+const dialog: Electron.Dialog = remote.require("dialog");
+const mainProcess = remote.getGlobal("mainProcess");
 
 export default class Server {
-    config = this.mainProcess.config;
-    nginxConfig = this.mainProcess.nginxConfig;
-    ingests: any[] = this.mainProcess.ingests;
-    private os: any = eRequire("os");
-    private remote = eRequire("remote");
-    private dialog: Electron.Dialog = this.remote.require("dialog");
-    private mainProcess = this.remote.getGlobal("mainProcess");
+    config = mainProcess.config;
+    nginxConfig = mainProcess.nginxConfig;
+    ingests: any[] = mainProcess.ingests;
 
     static create() {
         if ((<any>window).process == null) {
@@ -36,20 +36,20 @@ export default class Server {
 
     showOpenDialog() {
         return new Promise<string>((resolve, reject) => {
-            let filters = this.os.platform() === "win32"
+            let filters = os.platform() === "win32"
                 ? [{ name: "nginx.exe", extensions: ["exe"] }]
                 : [];
-            this.dialog.showOpenDialog(
+            dialog.showOpenDialog(
                 { filters },
                 fileNames => resolve(fileNames == null ? null : fileNames[0]));
         });
     }
 
     save() {
-        this.mainProcess.save();
+        mainProcess.save();
     }
 
     restart() {
-        this.mainProcess.restart();
+        mainProcess.restart();
     }
 }
