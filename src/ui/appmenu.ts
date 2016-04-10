@@ -40,7 +40,7 @@ export function initMenu() {
                 label: "Select All",
                 accelerator: "CmdOrCtrl+A",
                 role: "selectall"
-            },
+            }
         ]
     }];
 
@@ -84,7 +84,7 @@ export function initMenu() {
                 label: "Quit",
                 accelerator: "Command+Q",
                 click: () => app.quit()
-            },
+            }
         ]
     });
 

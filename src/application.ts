@@ -135,7 +135,9 @@ export default class Application {
 }
 
 function keepAlive() {
+    /* tslint:disable:no-unused-expression */
     new BrowserWindow({ width: 0, height: 0, show: false });
+    /* tslint:enable:no-unused-expression */
 }
 
 function broadcastingServices(nginxConfig: NginxConfig) {

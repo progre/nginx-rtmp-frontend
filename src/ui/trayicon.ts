@@ -1,5 +1,3 @@
-import * as log4js from "log4js";
-const logger = log4js.getLogger();
 const Tray = require("tray");
 const Menu = require("menu");
 import * as path from "path";

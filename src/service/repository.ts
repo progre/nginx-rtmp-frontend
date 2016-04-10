@@ -1,6 +1,4 @@
 const app = require("app");
-import * as log4js from "log4js";
-const logger = log4js.getLogger();
 import * as promisify from "native-promisify";
 import * as fs from "fs";
 const readFile = promisify(fs.readFile);
