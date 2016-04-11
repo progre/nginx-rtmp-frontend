@@ -1,4 +1,5 @@
 /// <reference path="../../../typings/browser.d.ts" />
+import "babel-polyfill";
 import * as i18n from "i18next";
 const XHR = require("i18next-xhr-backend");
 const Cache = require("i18next-localstorage-cache");
@@ -10,41 +11,30 @@ const remote = eRequire("electron").remote;
 const Menu = remote.Menu;
 const SERVICES = ["twitch", "peercaststation", "cavetube", "livecodingtv", "niconico", "other"];
 
-new Promise(
-    (resolve, reject) =>
-        $(resolve))
-    .then(() => Promise.all<any>([
-        new Promise(
-            (resolve, reject) =>
-                i18n.use(XHR)
-                    .use(Cache)
-                    .use(LanguageDetector)
-                    .use(sprintf)
-                    .init({
-                        backend: {
-                            loadPath: "./locales/{{lng}}/{{ns}}.json"
-                        },
-                        lng: navigator.language
-                     }, resolve))
-            .then(() => {
-                console.log("i18n begin");
-                $("[class*=i18n-]").each((i, elem) => {
-                    let key = elem.className
-                        .split(" ")
-                        .filter(x => x.indexOf("i18n-") === 0)[0]
-                        .slice("i18n-".length);
-                    console.log(key, i18n.t(key));
-                    $(elem).html(i18n.t(key));
-                });
-            })
-    ]))
-    .then(() => {
-        initShortcutKey();
-        initUI();
-    })
-    .catch(e => {
-        console.error(e);
+async function main() {
+    await new Promise((resolve, reject) =>
+        $(resolve));
+    await new Promise((resolve, reject) =>
+        i18n.use(XHR)
+            .use(Cache)
+            .use(LanguageDetector)
+            .use(sprintf)
+            .init({
+                backend: {
+                    loadPath: "./locales/{{lng}}/{{ns}}.json"
+                },
+                lng: navigator.language
+            }, resolve));
+    $("[class*=i18n-]").each((i, elem) => {
+        let key = elem.className
+            .split(" ")
+            .filter(x => x.indexOf("i18n-") === 0)[0]
+            .slice("i18n-".length);
+        $(elem).html(i18n.t(key));
     });
+    initShortcutKey();
+    initUI();
+}
 
 function initShortcutKey() {
     let menu = Menu.buildFromTemplate(<any[]>[
@@ -209,3 +199,8 @@ function updateFms() {
         $("#fms").val(`rtmp://127.0.0.1:${port}/live`);
     }
 }
+
+main().catch(e => {
+    console.error(e);
+    throw e;
+});
