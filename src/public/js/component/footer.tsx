@@ -1,19 +1,22 @@
 import * as React from "react";
 
-export default function Footer() {
+export default function Footer(props: { needRestart: boolean }) {
     return <fieldset className="text-right">
         <div className="row">
             <div className="col-sm-12">
                 <button
                     type="button"
                     id="restart-button"
-                    className="btn btn-secondary i18n-restart-nginx"/>
+                    className={[
+                        "btn",
+                        "i18n-restart-nginx",
+                        props.needRestart ? "btn-primary" : "btn-secondary"
+                    ].join(" ") }/>
             </div>
         </div>
         <div className="row">
             <div
-                style={{ display: "none" }}
-                id="restart-message"
+                style={{ display: props.needRestart ? "initial" : "none" }}
                 className="col-sm-12 i18n-notification-for-restart-nginx"/>
         </div>
     </fieldset>;

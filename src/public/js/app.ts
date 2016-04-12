@@ -14,9 +14,11 @@ const remote = eRequire("electron").remote;
 const Menu = remote.Menu;
 const SERVICES = ["twitch", "peercaststation", "cavetube", "livecodingtv", "niconico", "other"];
 
+let root: Root;
+
 async function main() {
-    ReactDOM.render(
-        React.createElement(Root),
+    root = ReactDOM.render(
+        React.createElement(Root, {}),
         document.getElementsByTagName("main")[0]);
     await new Promise((resolve, reject) =>
         $(resolve));
@@ -165,11 +167,8 @@ function initUI() {
     });
     $("#restart-button")
         .click(function() {
-            $(this)
-                .removeClass("btn-primary")
-                .addClass("btn-secondary");
-            $("#restart-message").hide();
             server.restart();
+            root.setNeedRestart(false);
         });
     updateFms();
     showOption("twitch");
@@ -177,10 +176,7 @@ function initUI() {
 }
 
 function setActiveToRestartButton() {
-    $("#restart-button")
-        .removeClass("btn-secondary")
-        .addClass("btn-primary");
-    $("#restart-message").show();
+    root.setNeedRestart(true);
 }
 
 function showOption(service: string) {
