@@ -1,14 +1,20 @@
 import * as React from "react";
 
 export default function Footer() {
-    return <fieldset class="text-right">
-        <div class="row">
-            <div class="col-sm-12">
-                <button type="button" id="restart-button" class="btn btn-secondary i18n-restart-nginx"></button>
+    return <fieldset className="text-right">
+        <div className="row">
+            <div className="col-sm-12">
+                <button
+                    type="button"
+                    id="restart-button"
+                    className="btn btn-secondary i18n-restart-nginx"/>
             </div>
         </div>
-        <div class="row">
-            <div style="display: none;" id="restart-message" class="col-sm-12 i18n-notification-for-restart-nginx"></div>
+        <div className="row">
+            <div
+                style={{ display: "none" }}
+                id="restart-message"
+                className="col-sm-12 i18n-notification-for-restart-nginx"/>
         </div>
     </fieldset>;
 }

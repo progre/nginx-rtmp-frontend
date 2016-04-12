@@ -1,10 +1,13 @@
 /// <reference path="../../../typings/browser.d.ts" />
 import "babel-polyfill";
+import * as React from "react";
+import * as ReactDOM from "react-dom";
 import * as i18n from "i18next";
 const XHR = require("i18next-xhr-backend");
 const Cache = require("i18next-localstorage-cache");
 import * as sprintf from "i18next-sprintf-postprocessor";
 const LanguageDetector = require("i18next-browser-languagedetector");
+import Root from "./component/root";
 import Server from "./server";
 const eRequire = require;
 const remote = eRequire("electron").remote;
@@ -12,6 +15,9 @@ const Menu = remote.Menu;
 const SERVICES = ["twitch", "peercaststation", "cavetube", "livecodingtv", "niconico", "other"];
 
 async function main() {
+    ReactDOM.render(
+        React.createElement(Root),
+        document.getElementsByTagName("main")[0]);
     await new Promise((resolve, reject) =>
         $(resolve));
     await new Promise((resolve, reject) =>
@@ -37,7 +43,7 @@ async function main() {
 }
 
 function initShortcutKey() {
-    let menu = Menu.buildFromTemplate(<any[]>[
+    let menu = Menu.buildFromTemplate([
         {
             label: "Copy",
             accelerator: "CmdOrCtrl+C",

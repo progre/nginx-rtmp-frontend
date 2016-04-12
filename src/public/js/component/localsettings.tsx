@@ -2,42 +2,47 @@ import * as React from "react";
 
 export default function LocalSettings() {
     return <fieldset>
-        <legend class="i18n-local-settings"></legend>
-        <div class="row">
-            <div class="col-sm-3 text-right">
-                <label for="nginx-path" class="form-control-static i18n-path-to-nginx"></label>
+        <legend className="i18n-local-settings"/>
+        <div className="row">
+            <div className="col-sm-3 text-right">
+                <label for="nginx-path" className="form-control-static i18n-path-to-nginx"/>
             </div>
-            <div class="col-sm-9">
-                <div class="input-group">
-                    <input id="nginx-path" type="text" style="width: 100%;" class="form-control"/>
-                    <span class="input-group-btn">
-                        <button id="select-button" type="button" class="btn btn-secondary i18n-select"></button>
+            <div className="col-sm-9">
+                <div className="input-group">
+                    <input id="nginx-path" type="text" style={{ width: "100%" }} className="form-control"/>
+                    <span className="input-group-btn">
+                        <button id="select-button" type="button" className="btn btn-secondary i18n-select"/>
                     </span>
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-sm-3 text-right">
-                <label for="port" class="form-control-static i18n-port"></label>
+        <div className="row">
+            <div className="col-sm-3 text-right">
+                <label for="port" className="form-control-static i18n-port"/>
             </div>
-            <div class="col-sm-2">
-                <input id="port" placeholder="1935" type="number" min="1" max="65535" class="form-control"/>
+            <div className="col-sm-2">
+                <input id="port" placeholder="1935" type="number" min="1" max="65535" className="form-control"/>
             </div>
         </div>
         <hr/>
-        <div class="row">
-            <div class="col-sm-3 text-right">
-                <label for="fms" class="form-control-static">FMS URL: </label>
+        <div className="row">
+            <div className="col-sm-3 text-right">
+                <label for="fms" className="form-control-static">FMS URL: </label>
             </div>
-            <div class="col-sm-6">
-                <div class="input-group">
-                    <input type="text" readonly style="width: 100%;" id="fms" class="form-control"/><span class="input-group-btn">
-                        <button type="button" id="copy" class="btn btn-secondary"><i class="fa fa-files-o"></i><span style="margin-left: 0.5em;" class="i18n-copy"></span></button></span>
+            <div className="col-sm-6">
+                <div className="input-group">
+                    <input type="text" readonly style={{ width: "100%" }} id="fms" className="form-control"/>
+                    <span className="input-group-btn">
+                        <button type="button" id="copy" className="btn btn-secondary">
+                            <i className="fa fa-files-o"/>
+                            <span style={{ marginLeft: "0.5em" }} className="i18n-copy"/>
+                        </button>
+                    </span>
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-sm-push-3 col-sm-9 i18n-notification-for-fms-url"></div>
+        <div className="row">
+            <div className="col-sm-push-3 col-sm-9 i18n-notification-for-fms-url"/>
         </div>
     </fieldset>;
 }
