@@ -31,9 +31,9 @@ export default function LocalSettings() {
             </div>
             <div className="col-sm-6">
                 <div className="input-group">
-                    <input type="text" readonly style={{ width: "100%" }} id="fms" className="form-control"/>
+                    <input type="text" readOnly style={{ width: "100%" }} id="fms" className="form-control"/>
                     <span className="input-group-btn">
-                        <button type="button" id="copy" className="btn btn-secondary">
+                        <button type="button" className="btn btn-secondary" onClick={copy}>
                             <i className="fa fa-files-o"/>
                             <span style={{ marginLeft: "0.5em" }} className="i18n-copy"/>
                         </button>
@@ -45,4 +45,9 @@ export default function LocalSettings() {
             <div className="col-sm-push-3 col-sm-9 i18n-notification-for-fms-url"/>
         </div>
     </fieldset>;
+}
+
+function copy() {
+    $("#fms").select();
+    document.execCommand("copy");
 }

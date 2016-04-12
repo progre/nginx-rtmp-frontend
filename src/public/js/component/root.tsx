@@ -15,11 +15,9 @@ export default class Root extends React.Component<{}, { needRestart: boolean }> 
     }
 
     render() {
-        return <div id="root" style={{ display: "none" }} className="container">
-            <p>
-                <LocalSettings/>
-                <ServiceSettings/>
-            </p>
+        return <div className="container">
+            <LocalSettings/>
+            <ServiceSettings/>
             <hr/>
             <Footer needRestart={this.state.needRestart}/>
         </div>;
