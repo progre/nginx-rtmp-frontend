@@ -2,19 +2,17 @@ import * as React from "react";
 import * as ReactDOM from "react-dom";
 import * as uuid from "node-uuid";
 
-export default class LocalSettings extends React.Component<{}, { fmsURL: string }> {
+export interface Props {
+    nginxPath: string;
+    port: number;
+    onNginxPathSelectorLaunch: () => void;
+    onNginxPathChange: (path: string) => void;
+    onPortChange: (port: number) => void;
+}
+
+export default class LocalSettings extends React.Component<Props, {}> {
     constructor() {
         super();
-        this.state = {
-            fmsURL: ""
-        };
-    }
-
-    setFMSURL(value: string) {
-        this.setState({
-            fmsURL: value
-        });
-        console.log(value);
     }
 
     render() {
@@ -27,7 +25,13 @@ export default class LocalSettings extends React.Component<{}, { fmsURL: string 
                 </div>
                 <div className="col-sm-9">
                     <div className="input-group">
-                        <input id="nginx-path" type="text" style={{ width: "100%" }} className="form-control"/>
+                        <input
+                            id="nginx-path"
+                            type="text"
+                            style={{ width: "100%" }}
+                            className="form-control"
+                            value={this.props.nginxPath}
+                            onChange={e => this.props.onNginxPathChange((e.target as HTMLInputElement).value) }/>
                         <span className="input-group-btn">
                             <button id="select-button" type="button" className="btn btn-secondary i18n-select"/>
                         </span>
@@ -39,7 +43,14 @@ export default class LocalSettings extends React.Component<{}, { fmsURL: string 
                     <label for="port" className="form-control-static i18n-port"/>
                 </div>
                 <div className="col-sm-2">
-                    <input id="port" placeholder="1935" type="number" min="1" max="65535" className="form-control"/>
+                    <input id="port"
+                        placeholder="1935"
+                        type="number"
+                        min="1"
+                        max="65535"
+                        className="form-control"
+                        value={this.props.port}
+                        onChange={e => this.props.onPortChange(Number.parseInt((e.target as HTMLInputElement).value)) }/>
                 </div>
             </div>
             <hr/>
@@ -56,7 +67,7 @@ export default class LocalSettings extends React.Component<{}, { fmsURL: string 
                             style={{ width: "100%" }}
                             id={fmsURLId}
                             className="form-control"
-                            value={this.state.fmsURL}/>
+                            value={this.getFMSURL() }/>
                         <span className="input-group-btn">
                             <button
                                 type="button"
@@ -73,6 +84,15 @@ export default class LocalSettings extends React.Component<{}, { fmsURL: string 
                 <div className="col-sm-push-3 col-sm-9 i18n-notification-for-fms-url"/>
             </div>
         </fieldset>;
+    }
+
+    private getFMSURL() {
+        let port = this.props.port;
+        if (port == null || port === 1935) {
+            return `rtmp://127.0.0.1/live`;
+        } else {
+            return `rtmp://127.0.0.1:${port}/live`;
+        }
     }
 
     private copyFMSURL() {

@@ -5,3 +5,4 @@
 /// <reference path="./DefinitelyTyped/node-uuid/node-uuid.d.ts" />
 /// <reference path="./DefinitelyTyped/react/react.d.ts" />
 /// <reference path="./DefinitelyTyped/react/react-dom.d.ts" />
+/// <reference path="./DefinitelyTyped/redux/redux.d.ts" />

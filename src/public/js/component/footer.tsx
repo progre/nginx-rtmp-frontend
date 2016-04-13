@@ -1,12 +1,12 @@
 import * as React from "react";
 
-export default function Footer(props: { needRestart: boolean }) {
+export default function Footer(props: { needRestart: boolean, onRestart: Function }) {
     return <fieldset className="text-right">
         <div className="row">
             <div className="col-sm-12">
                 <button
                     type="button"
-                    id="restart-button"
+                    onClick={props.onRestart}
                     className={[
                         "btn",
                         "i18n-restart-nginx",

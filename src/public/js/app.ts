@@ -7,8 +7,7 @@ const XHR = require("i18next-xhr-backend");
 const Cache = require("i18next-localstorage-cache");
 import * as sprintf from "i18next-sprintf-postprocessor";
 const LanguageDetector = require("i18next-browser-languagedetector");
-import Root from "./component/root";
-import LocalSettings from "./component/localsettings";
+import Root, {Props} from "./component/root";
 import Server from "./server";
 const eRequire = require;
 const remote = eRequire("electron").remote;
@@ -18,9 +17,38 @@ const SERVICES = ["twitch", "peercaststation", "cavetube", "livecodingtv", "nico
 let root: Root;
 
 async function main() {
+    let server = Server.create();
     root = ReactDOM.render(
-        React.createElement(Root, {}),
+        React.createElement(Root, <Props>{
+            onNginxPathSelectorLaunch: async () => {
+                let fileName = await server.showOpenDialog()
+                if (fileName == null) {
+                    return;
+                }
+                server.config.exePath = fileName;
+                root.setState({ nginxPath: fileName });
+            },
+            onNginxPathChange: path => {
+                server.config.exePath = path;
+                root.setState({ nginxPath: path });
+            },
+            onPortChange: port => {
+                if (port == null || Number.isNaN(port)) {
+                    port = 1935;
+                }
+                server.nginxConfig.setPort(port);
+                root.setState({ port });
+            },
+            onRestart: () => {
+                server.restart();
+                root.setState({ needRestart: true });
+            }
+        }),
         document.getElementsByTagName("main")[0]);
+    root.setState({
+        nginxPath: server.config.exePath,
+        port: server.config.exePath
+    });
     await new Promise((resolve, reject) =>
         $(resolve));
     await new Promise((resolve, reject) =>
@@ -42,7 +70,7 @@ async function main() {
         $(elem).html(i18n.t(key));
     });
     initShortcutKey();
-    initUI();
+    initUI(server);
 }
 
 function initShortcutKey() {
@@ -77,43 +105,13 @@ function initShortcutKey() {
         false);
 }
 
-function initUI() {
-    let server = Server.create();
+function initUI(server: Server) {
     addEventListener("blur", () => {
         server.save();
     });
     addEventListener("unload", () => {
         server.save();
     });
-    $("#nginx-path")
-        .val(server.config.exePath)
-        .change(function() {
-            server.config.exePath = $(this).val();
-            setActiveToRestartButton();
-        });
-    $("#select-button")
-        .click(() => {
-            server.showOpenDialog()
-                .then(fileName => {
-                    if (fileName == null) {
-                        return;
-                    }
-                    server.config.exePath = fileName;
-                    setActiveToRestartButton();
-                    $("#nginx-path").val(fileName);
-                });
-        });
-    $("#port")
-        .val(server.nginxConfig.port())
-        .change(function() {
-            let port = $(this).val();
-            if (port == null) {
-                port = 1935;
-            }
-            server.nginxConfig.setPort(port);
-            updateFms();
-            setActiveToRestartButton();
-        });
     $("#twitch-fms").append(
         server.ingests
             .sort((a, b) =>
@@ -145,33 +143,23 @@ function initUI() {
                     $(`#${x}-check`).hide();
                     server.nginxConfig.disable(x);
                 }
-                setActiveToRestartButton();
+                root.setState({ needRestart: true });
             });
         $(`#${x}-fms`)
             .val(server.nginxConfig.fms(x))
             .change(function() {
                 server.nginxConfig.setFms(x, $(this).val());
-                setActiveToRestartButton();
+                root.setState({ needRestart: true });
             });
         $(`#${x}-key`)
             .val(server.nginxConfig.key(x))
             .change(function() {
                 server.nginxConfig.setKey(x, $(this).val());
-                setActiveToRestartButton();
+                root.setState({ needRestart: true });
             });
     });
-    $("#restart-button")
-        .click(function() {
-            server.restart();
-            root.setNeedRestart(false);
-        });
-    updateFms();
     showOption("twitch");
     $("#root").fadeIn("fast");
-}
-
-function setActiveToRestartButton() {
-    root.setNeedRestart(true);
 }
 
 function showOption(service: string) {
@@ -186,19 +174,6 @@ function showOption(service: string) {
         .addClass("btn-primary")
         .blur();
     $(`#${service}-option`).show();
-}
-
-function updateFms() {
-    (root.refs["local-settings"] as LocalSettings).setFMSURL(getURL());
-}
-
-function getURL() {
-    let port: string = $("#port").val();
-    if (port == null || port === "" || port === "1935") {
-        return `rtmp://127.0.0.1/live`;
-    } else {
-        return `rtmp://127.0.0.1:${port}/live`;
-    }
 }
 
 main().catch(e => {
