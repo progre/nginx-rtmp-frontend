@@ -4,7 +4,19 @@ export default function ServiceSettings() {
     return     <fieldset>
       <legend className="i18n-service-settings"></legend>
       <div className="row">
-        <div className="col-sm-4 btn-group-vertical">
+        <Menu/>
+        <Contents/>
+      </div>
+    </fieldset>;
+}
+
+// button.btn.btn-secondary.text-left#cavetube-button
+//   span.pull-left CaveTube
+//   span.pull-right
+//     i.fa.fa-check#cavetube-check
+
+function Menu() {
+    return         <div className="col-sm-4 btn-group-vertical">
           <button id="twitch-button" className="btn btn-secondary">
             <span style={{width: 16, height: 16}} className="pull-left">
             <img src="http://www.twitch.tv/favicon.ico" width="16" height="16" onerror="this.style.display = 'none';"/>
@@ -19,12 +31,6 @@ export default function ServiceSettings() {
           <span style={{marginLeft: "0.5em"}} className="pull-left">PeerCastStation</span>
           <span className="pull-right"><i id="peercaststation-check" className="fa fa-check"/></span>
           </button>
-          <div style={{display:"none"}}>
-            // button.btn.btn-secondary.text-left#cavetube-button
-            //   span.pull-left CaveTube
-            //   span.pull-right
-            //     i.fa.fa-check#cavetube-check
-            </div>
           <button id="livecodingtv-button" className="btn btn-secondary text-left">
           <span style={{width: 16, height: 16}} className="pull-left">
           <img src="https://www.livecoding.tv/favicon.ico" width="16" height="16" onerror="this.style.display = 'none';"/>
@@ -45,8 +51,11 @@ export default function ServiceSettings() {
           <span style={{marginLeft: "0.5em"}} className="pull-left">Other</span>
           <span className="pull-right"><i id="other-check" className="fa fa-check"/></span>
           </button>
-        </div>
-        <div style={{display: "none"}} id="twitch-option" className="col-sm-8">
+        </div>;
+}
+
+function TwitchContents() {
+    return <div style={{display: "none"}} id="twitch-option" className="col-sm-8">
           <div className="row">
             <div className="col-sm-push-3 col-sm-9">
               <div className="checkbox">
@@ -77,8 +86,11 @@ export default function ServiceSettings() {
             <a href="http://www.twitch.tv/" target="_blank" className="selectable">http://www.twitch.tv/</a>
             </div>
           </div>
-        </div>
-        <div style={{display: "none"}} id="peercaststation-option" className="col-sm-8">
+        </div>;
+}
+
+function PeerCastStationContents() {
+    return <div style={{display: "none"}} id="peercaststation-option" className="col-sm-8">
           <div className="row">
             <div className="col-sm-push-3 col-sm-9">
               <div className="checkbox">
@@ -104,27 +116,29 @@ export default function ServiceSettings() {
             <a href="http://www.pecastation.org/" target="_blank" className="selectable">http://www.pecastation.org/</a>
             </div>
           </div>
-        </div>
-          <div style={{display:"none"}}>
-        // .col-sm-8(style='display: none;')#cavetube-option
-        //   .row
-        //     .col-sm-push-3.col-sm-9
-        //       .checkbox
-        //         label
-        //           input(type='checkbox')#cavetube-enabled
-        //           span.i18n-enable
-        //   .row
-        //     .col-sm-3.text-right
-        //       label.form-control-static(for='cavetube-fms') FMS URL:
-        //     .col-sm-9
-        //       input.form-control(style='width: 100%', type='text')#cavetube-fms
-        //   .row
-        //     .col-sm-3.text-right
-        //       label.form-control-static.i18n-stream-key(for='cavetube-key')
-        //     .col-sm-9
-        //       input.form-control(style='width: 100%', type='text')#cavetube-key
-        </div>
-        <div style={{display: "none"}} id="livecodingtv-option" className="col-sm-8">
+        </div>;
+}
+
+// .col-sm-8(style='display: none;')#cavetube-option
+//   .row
+//     .col-sm-push-3.col-sm-9
+//       .checkbox
+//         label
+//           input(type='checkbox')#cavetube-enabled
+//           span.i18n-enable
+//   .row
+//     .col-sm-3.text-right
+//       label.form-control-static(for='cavetube-fms') FMS URL:
+//     .col-sm-9
+//       input.form-control(style='width: 100%', type='text')#cavetube-fms
+//   .row
+//     .col-sm-3.text-right
+//       label.form-control-static.i18n-stream-key(for='cavetube-key')
+//     .col-sm-9
+//       input.form-control(style='width: 100%', type='text')#cavetube-key
+
+function LivecodingTvContents() {
+       return <div style={{display: "none"}} id="livecodingtv-option" className="col-sm-8">
           <div className="row">
             <div className="col-sm-push-3 col-sm-9">
               <div className="checkbox">
@@ -155,8 +169,11 @@ export default function ServiceSettings() {
             <a href="https://www.livecoding.tv/" target="_blank" className="selectable">https://www.livecoding.tv/</a>
             </div>
           </div>
-        </div>
-        <div style={{display: "none"}} id="niconico-option" className="col-sm-8">
+        </div>;
+}
+
+function NiconicoContents() {
+    return         <div style={{display: "none"}} id="niconico-option" className="col-sm-8">
           <div className="row">
             <div className="col-sm-push-3 col-sm-9">
               <div className="checkbox">
@@ -187,8 +204,11 @@ export default function ServiceSettings() {
             <a href="http://live.nicovideo.jp/" target="_blank" className="selectable">http://live.nicovideo.jp/</a>
             </div>
           </div>
-        </div>
-        <div style={{display: "none"}} id="other-option" className="col-sm-8">
+        </div>;
+}
+
+function OtherContents() {
+    return         <div style={{display: "none"}} id="other-option" className="col-sm-8">
           <div className="row">
             <div className="col-sm-push-3 col-sm-9">
               <div className="checkbox">
@@ -214,7 +234,15 @@ export default function ServiceSettings() {
               <input style={{width: "100%"}} type="text" id="other-key" className="form-control"/>
             </div>
           </div>
-        </div>
-      </div>
-    </fieldset>;
+        </div>;
+}
+
+function Contents() {
+        return <div>
+        <TwitchContents/>
+        <PeerCastStationContents/>
+        <LivecodingTvContents/>
+        <NiconicoContents/>
+        <OtherContents/>
+</div>;
 }

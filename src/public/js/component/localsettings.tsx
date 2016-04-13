@@ -11,22 +11,20 @@ export interface Props {
 }
 
 export default class LocalSettings extends React.Component<Props, {}> {
-    constructor() {
-        super();
-    }
-
     render() {
+        let nginxPathId = uuid.v4();
+        let portId = uuid.v4();
         let fmsURLId = uuid.v4();
         return <fieldset>
             <legend className="i18n-local-settings"/>
             <div className="row">
                 <div className="col-sm-3 text-right">
-                    <label for="nginx-path" className="form-control-static i18n-path-to-nginx"/>
+                    <label for={nginxPathId} className="form-control-static i18n-path-to-nginx"/>
                 </div>
                 <div className="col-sm-9">
                     <div className="input-group">
                         <input
-                            id="nginx-path"
+                            id={nginxPathId}
                             type="text"
                             style={{ width: "100%" }}
                             className="form-control"
@@ -40,10 +38,10 @@ export default class LocalSettings extends React.Component<Props, {}> {
             </div>
             <div className="row">
                 <div className="col-sm-3 text-right">
-                    <label for="port" className="form-control-static i18n-port"/>
+                    <label for={portId} className="form-control-static i18n-port"/>
                 </div>
                 <div className="col-sm-2">
-                    <input id="port"
+                    <input id={portId}
                         placeholder="1935"
                         type="number"
                         min="1"
