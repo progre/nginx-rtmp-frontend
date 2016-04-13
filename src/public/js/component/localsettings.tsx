@@ -3,7 +3,22 @@ import * as ReactDOM from "react-dom";
 import * as uuid from "node-uuid";
 
 export default class LocalSettings extends React.Component<{}, { fmsURL: string }> {
+    constructor() {
+        super();
+        this.state = {
+            fmsURL: ""
+        };
+    }
+
+    setFMSURL(value: string) {
+        this.setState({
+            fmsURL: value
+        });
+        console.log(value);
+    }
+
     render() {
+        let fmsURLId = uuid.v4();
         return <fieldset>
             <legend className="i18n-local-settings"/>
             <div className="row">
@@ -28,38 +43,42 @@ export default class LocalSettings extends React.Component<{}, { fmsURL: string 
                 </div>
             </div>
             <hr/>
-            <FMSURL value={this.state.fmsURL}/>
+            <div className="row">
+                <div className="col-sm-3 text-right">
+                    <label for={fmsURLId} className="form-control-static">FMS URL: </label>
+                </div>
+                <div className="col-sm-6">
+                    <div className="input-group">
+                        <input
+                            ref="input"
+                            type="text"
+                            readOnly
+                            style={{ width: "100%" }}
+                            id={fmsURLId}
+                            className="form-control"
+                            value={this.state.fmsURL}/>
+                        <span className="input-group-btn">
+                            <button
+                                type="button"
+                                className="btn btn-secondary"
+                                onClick={() => this.copyFMSURL() }>
+                                <i className="fa fa-files-o"/>
+                                <span style={{ marginLeft: "0.5em" }} className="i18n-copy"/>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+            </div>
             <div className="row">
                 <div className="col-sm-push-3 col-sm-9 i18n-notification-for-fms-url"/>
             </div>
         </fieldset>;
     }
-}
 
-class FMSURL extends React.Component<{ value: string }, void> {
-    render() {
-        let id = uuid.v4();
-        return <div className="row">
-            <div className="col-sm-3 text-right">
-                <label for={id} className="form-control-static">FMS URL: </label>
-            </div>
-            <div className="col-sm-6">
-                <div className="input-group">
-                    <input ref="input" type="text" readOnly style={{ width: "100%" }} id={id} className="form-control"/>
-                    <span className="input-group-btn">
-                        <button type="button" className="btn btn-secondary" onClick={() => this.copy() }>
-                            <i className="fa fa-files-o"/>
-                            <span style={{ marginLeft: "0.5em" }} className="i18n-copy"/>
-                        </button>
-                    </span>
-                </div>
-            </div>
-        </div>;
-    }
-
-    private copy() {
+    private copyFMSURL() {
+        /* tslint:disable:no-string-literal */
         let input = ReactDOM.findDOMNode(this.refs["input"]) as HTMLInputElement;
-        input.focus();
+        /* tslint:enable */
         input.select();
         document.execCommand("copy");
     }

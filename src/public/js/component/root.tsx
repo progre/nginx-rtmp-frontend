@@ -16,7 +16,7 @@ export default class Root extends React.Component<{}, { needRestart: boolean }> 
 
     render() {
         return <div className="container">
-            <LocalSettings/>
+            <LocalSettings ref="local-settings"/>
             <ServiceSettings/>
             <hr/>
             <Footer needRestart={this.state.needRestart}/>

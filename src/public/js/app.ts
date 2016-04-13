@@ -8,6 +8,7 @@ const Cache = require("i18next-localstorage-cache");
 import * as sprintf from "i18next-sprintf-postprocessor";
 const LanguageDetector = require("i18next-browser-languagedetector");
 import Root from "./component/root";
+import LocalSettings from "./component/localsettings";
 import Server from "./server";
 const eRequire = require;
 const remote = eRequire("electron").remote;
@@ -77,12 +78,6 @@ function initShortcutKey() {
 }
 
 function initUI() {
-    $("#copy")
-        .click(() => {
-            $("#fms").select();
-            document.execCommand("copy");
-        });
-
     let server = Server.create();
     addEventListener("blur", () => {
         server.save();
@@ -194,11 +189,15 @@ function showOption(service: string) {
 }
 
 function updateFms() {
+    (root.refs["local-settings"] as LocalSettings).setFMSURL(getURL());
+}
+
+function getURL() {
     let port: string = $("#port").val();
     if (port == null || port === "" || port === "1935") {
-        $("#fms").val(`rtmp://127.0.0.1/live`);
+        return `rtmp://127.0.0.1/live`;
     } else {
-        $("#fms").val(`rtmp://127.0.0.1:${port}/live`);
+        return `rtmp://127.0.0.1:${port}/live`;
     }
 }
 
