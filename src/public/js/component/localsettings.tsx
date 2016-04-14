@@ -1,6 +1,7 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import * as uuid from "node-uuid";
+import {t} from "i18next";
 
 export interface Props {
     nginxPath: string;
@@ -16,10 +17,14 @@ export default class LocalSettings extends React.Component<Props, {}> {
         let portId = uuid.v4();
         let fmsURLId = uuid.v4();
         return <fieldset>
-            <legend className="i18n-local-settings"/>
+            <legend>
+                {t("local-settings") }
+            </legend>
             <div className="row">
                 <div className="col-sm-3 text-right">
-                    <label for={nginxPathId} className="form-control-static i18n-path-to-nginx"/>
+                    <label for={nginxPathId} className="form-control-static">
+                        {t("path-to-nginx") }
+                    </label>
                 </div>
                 <div className="col-sm-9">
                     <div className="input-group">
@@ -31,14 +36,21 @@ export default class LocalSettings extends React.Component<Props, {}> {
                             value={this.props.nginxPath}
                             onChange={e => this.props.onNginxPathChange((e.target as HTMLInputElement).value) }/>
                         <span className="input-group-btn">
-                            <button id="select-button" type="button" className="btn btn-secondary i18n-select"/>
+                            <button
+                                type="button"
+                                className="btn btn-secondary"
+                                onClick={() => this.props.onNginxPathSelectorLaunch() }>
+                                {t("select") }
+                            </button>
                         </span>
                     </div>
                 </div>
             </div>
             <div className="row">
                 <div className="col-sm-3 text-right">
-                    <label for={portId} className="form-control-static i18n-port"/>
+                    <label for={portId} className="form-control-static">
+                        {t("port") }
+                    </label>
                 </div>
                 <div className="col-sm-2">
                     <input id={portId}
@@ -72,14 +84,18 @@ export default class LocalSettings extends React.Component<Props, {}> {
                                 className="btn btn-secondary"
                                 onClick={() => this.copyFMSURL() }>
                                 <i className="fa fa-files-o"/>
-                                <span style={{ marginLeft: "0.5em" }} className="i18n-copy"/>
+                                <span style={{ marginLeft: "0.5em" }}>
+                                    {t("copy") }
+                                </span>
                             </button>
                         </span>
                     </div>
                 </div>
             </div>
             <div className="row">
-                <div className="col-sm-push-3 col-sm-9 i18n-notification-for-fms-url"/>
+                <div className="col-sm-push-3 col-sm-9">
+                    {t("notification-for-fms-url") }
+                </div>
             </div>
         </fieldset>;
     }

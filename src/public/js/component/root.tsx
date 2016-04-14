@@ -1,10 +1,12 @@
 import * as React from "react";
 
 import LocalSettings from "./localsettings";
-import ServiceSettings from "./servicesettings";
+import ServiceSettings, {ServiceConfig} from "./servicesettings";
 import Footer from "./footer";
 
 export interface Props {
+    initialState: State;
+    twitchIngests: { name: string; url: string; }[];
     onNginxPathSelectorLaunch: () => void;
     onNginxPathChange: (path: string) => void;
     onPortChange: (port: number) => void;
@@ -15,22 +17,17 @@ export interface State {
     nginxPath?: string;
     port?: number;
     needRestart?: boolean;
+    serviceConfigs?: ServiceConfig[]
 }
 
 export default class Root extends React.Component<Props, State> {
-    constructor() {
-        super();
-        this.state = {
-            nginxPath: "",
-            port: 1935,
-            needRestart: false
-        };
+    componentWillMount() {
+        this.state = this.props.initialState;
     }
 
     render() {
         return <div className="container">
             <LocalSettings
-                ref="local-settings"
                 nginxPath={this.state.nginxPath}
                 port={this.state.port}
                 onNginxPathSelectorLaunch={this.props.onNginxPathSelectorLaunch}
@@ -42,7 +39,9 @@ export default class Root extends React.Component<Props, State> {
                     this.setState({ needRestart: true });
                     this.props.onPortChange(port);
                 } }/>
-            <ServiceSettings/>
+            <ServiceSettings
+                serviceConfigs={this.state.serviceConfigs}
+                twitchIngests={this.props.twitchIngests}/>
             <hr/>
             <Footer
                 needRestart={this.state.needRestart}

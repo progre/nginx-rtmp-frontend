@@ -1,4 +1,5 @@
 import * as React from "react";
+import {t} from "i18next";
 
 export default function Footer(props: { needRestart: boolean, onRestart: Function }) {
     return <fieldset className="text-right">
@@ -9,15 +10,18 @@ export default function Footer(props: { needRestart: boolean, onRestart: Functio
                     onClick={props.onRestart}
                     className={[
                         "btn",
-                        "i18n-restart-nginx",
                         props.needRestart ? "btn-primary" : "btn-secondary"
-                    ].join(" ") }/>
+                    ].join(" ") }>
+                    {t("restart-nginx") }
+                </button>
             </div>
         </div>
         <div className="row">
             <div
                 style={{ display: props.needRestart ? "initial" : "none" }}
-                className="col-sm-12 i18n-notification-for-restart-nginx"/>
+                className="col-sm-12">
+                {t("notification-for-restart-nginx") }
+            </div>
         </div>
     </fieldset>;
 }

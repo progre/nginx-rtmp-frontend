@@ -17,9 +17,42 @@ const SERVICES = ["twitch", "peercaststation", "cavetube", "livecodingtv", "nico
 let root: Root;
 
 async function main() {
+    await new Promise((resolve, reject) =>
+        $(resolve));
+    await new Promise((resolve, reject) =>
+        i18n.use(XHR)
+            .use(Cache)
+            .use(LanguageDetector)
+            .use(sprintf)
+            .init(
+            {
+                backend: {
+                    loadPath: "./locales/{{lng}}/{{ns}}.json"
+                },
+                lng: navigator.language
+            },
+            resolve));
     let server = Server.create();
     root = ReactDOM.render(
         React.createElement(Root, <Props>{
+            initialState: {
+                nginxPath: server.config.exePath,
+                port: server.config.exePath,
+                needRestart: false,
+                serviceConfigs: SERVICES.map(x => ({
+                    name: x,
+                    enabled: server.nginxConfig.enabled(x),
+                    fms: server.nginxConfig.fms(x),
+                    key: server.nginxConfig.key(x)
+                }))
+            },
+            twitchIngests: server.ingests
+                .sort((a, b) =>
+                    a.name === b.name ? 0 : a.name < b.name ? -1 : 1)
+                .map(x => ({
+                    name: x.name,
+                    url: (<string>x.url_template).replace("/{stream_key}", "")
+                })),
             onNginxPathSelectorLaunch: async () => {
                 let fileName = await server.showOpenDialog()
                 if (fileName == null) {
@@ -45,23 +78,6 @@ async function main() {
             }
         }),
         document.getElementsByTagName("main")[0]);
-    root.setState({
-        nginxPath: server.config.exePath,
-        port: server.config.exePath
-    });
-    await new Promise((resolve, reject) =>
-        $(resolve));
-    await new Promise((resolve, reject) =>
-        i18n.use(XHR)
-            .use(Cache)
-            .use(LanguageDetector)
-            .use(sprintf)
-            .init({
-                backend: {
-                    loadPath: "./locales/{{lng}}/{{ns}}.json"
-                },
-                lng: navigator.language
-            }, resolve));
     $("[class*=i18n-]").each((i, elem) => {
         let key = elem.className
             .split(" ")
@@ -112,21 +128,7 @@ function initUI(server: Server) {
     addEventListener("unload", () => {
         server.save();
     });
-    $("#twitch-fms").append(
-        server.ingests
-            .sort((a, b) =>
-                a.name === b.name ? 0 : a.name < b.name ? -1 : 1)
-            .map(x => ({
-                name: x.name,
-                url: (<string>x.url_template).replace("/{stream_key}", "")
-            }))
-            .map(x =>
-                $("<option>")
-                    .val(x.url)
-                    .text(x.name)));
     SERVICES.forEach(x => {
-        $(`#${x}-button`)
-            .click(() => showOption(x));
         let enabled = server.nginxConfig.enabled(x);
         if (enabled) {
             $(`#${x}-check`).show();
@@ -158,22 +160,7 @@ function initUI(server: Server) {
                 root.setState({ needRestart: true });
             });
     });
-    showOption("twitch");
     $("#root").fadeIn("fast");
-}
-
-function showOption(service: string) {
-    SERVICES.forEach(x => {
-        $(`#${x}-option`).hide();
-        $(`#${x}-button`)
-            .removeClass("btn-primary")
-            .addClass("btn-secondary");
-    });
-    $(`#${service}-button`)
-        .removeClass("btn-secondary")
-        .addClass("btn-primary")
-        .blur();
-    $(`#${service}-option`).show();
 }
 
 main().catch(e => {
