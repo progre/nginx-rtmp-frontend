@@ -55,7 +55,8 @@ export interface ServiceConfig {
 }
 
 export interface Props {
-    serviceConfigs: ServiceConfig[],
+    serviceConfigs: ServiceConfig[];
+    onEnabledChange: (service: string, enabled: boolean) => void;
     twitchIngests: { name: string; url: string; }[];
 }
 
@@ -89,7 +90,7 @@ export default class ServiceSettings extends React.Component<Props, State> {
                     definition={selectedDefinition}
                     config={selectedConfig}
                     twitchIngests={this.props.twitchIngests}
-                    onEnabledChange={() => }/>
+                    onEnabledChange={enabled => this.props.onEnabledChange(selected, enabled) }/>
             </div>
         </fieldset>;
     }
@@ -114,7 +115,6 @@ function Menu(props: {
                         serviceConfig={config }
                         onClick={() => props.onMenuClick(name) }/>;
                 })
-        }
         }
     </div>;
 }
@@ -150,7 +150,7 @@ function Contents(props: {
     definition: ServiceDefinition,
     config: ServiceConfig,
     twitchIngests: { name: string; url: string; }[];
-    onEnabledChange: () => void
+    onEnabledChange: (enabled: boolean) => void
 }) {
     return <div className="col-sm-8">
         <div className="row">
@@ -160,7 +160,7 @@ function Contents(props: {
                         <input
                             type="checkbox"
                             checked={props.config.enabled}
-                            onChange={props.onEnabledChange}
+                            onChange={e => props.onEnabledChange((e.target as HTMLInputElement).checked) }
                             id={`${props.definition.name}-enabled`}/>
                         <span className="i18n-enable"/>
                     </label>

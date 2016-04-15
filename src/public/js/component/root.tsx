@@ -10,6 +10,7 @@ export interface Props {
     onNginxPathSelectorLaunch: () => void;
     onNginxPathChange: (path: string) => void;
     onPortChange: (port: number) => void;
+    onEnabledChange: (service: string, enabled: boolean) => void;
     onRestart: Function;
 }
 
@@ -41,7 +42,8 @@ export default class Root extends React.Component<Props, State> {
                 } }/>
             <ServiceSettings
                 serviceConfigs={this.state.serviceConfigs}
-                twitchIngests={this.props.twitchIngests}/>
+                twitchIngests={this.props.twitchIngests}
+                onEnabledChange={this.props.onEnabledChange}/>
             <hr/>
             <Footer
                 needRestart={this.state.needRestart}
