@@ -1,7 +1,7 @@
 import * as React from "react";
-
+import {ServiceConfig} from "../domain/domains";
 import LocalSettings from "./localsettings";
-import ServiceSettings, {ServiceConfig} from "./servicesettings";
+import ServiceSettings from "./servicesettings";
 import Footer from "./footer";
 
 export interface Props {
@@ -10,7 +10,9 @@ export interface Props {
     onNginxPathSelectorLaunch: () => void;
     onNginxPathChange: (path: string) => void;
     onPortChange: (port: number) => void;
-    onEnabledChange: (service: string, enabled: boolean) => void;
+    onEnabledChange: (service: string, value: boolean) => void;
+    onFMSChange: (service: string, value: string) => void;
+    onStreamKeyChange: (service: string, value: string) => void;
     onRestart: Function;
 }
 
@@ -18,7 +20,7 @@ export interface State {
     nginxPath?: string;
     port?: number;
     needRestart?: boolean;
-    serviceConfigs?: ServiceConfig[]
+    serviceConfigs?: ServiceConfig[];
 }
 
 export default class Root extends React.Component<Props, State> {
@@ -43,7 +45,9 @@ export default class Root extends React.Component<Props, State> {
             <ServiceSettings
                 serviceConfigs={this.state.serviceConfigs}
                 twitchIngests={this.props.twitchIngests}
-                onEnabledChange={this.props.onEnabledChange}/>
+                onEnabledChange={this.props.onEnabledChange}
+                onFMSChange={this.props.onFMSChange}
+                onStreamKeyChange={this.props.onStreamKeyChange}/>
             <hr/>
             <Footer
                 needRestart={this.state.needRestart}

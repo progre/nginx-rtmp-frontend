@@ -9,12 +9,11 @@ import * as sprintf from "i18next-sprintf-postprocessor";
 const LanguageDetector = require("i18next-browser-languagedetector");
 import Root, {Props} from "./component/root";
 import Server from "./server";
+import {ServiceConfig} from "./domain/domains";
 const eRequire = require;
 const remote = eRequire("electron").remote;
 const Menu = remote.Menu;
 const SERVICES = ["twitch", "peercaststation", "cavetube", "livecodingtv", "niconico", "other"];
-
-let root: Root;
 
 async function main() {
     await new Promise((resolve, reject) =>
@@ -33,7 +32,7 @@ async function main() {
             },
             resolve));
     let server = Server.create();
-    root = ReactDOM.render(
+    let root = ReactDOM.render(
         React.createElement(Root, <Props>{
             initialState: {
                 nginxPath: server.config.exePath,
@@ -54,7 +53,7 @@ async function main() {
                     url: (<string>x.url_template).replace("/{stream_key}", "")
                 })),
             onNginxPathSelectorLaunch: async () => {
-                let fileName = await server.showOpenDialog()
+                let fileName = await server.showOpenDialog();
                 if (fileName == null) {
                     return;
                 }
@@ -71,6 +70,40 @@ async function main() {
                 }
                 server.nginxConfig.setPort(port);
                 root.setState({ port });
+            },
+            onEnabledChange: (service, value) => {
+                if (value) {
+                    server.nginxConfig.enable(service);
+                } else {
+                    server.nginxConfig.disable(service);
+                }
+                root.setState({
+                    serviceConfigs: updateServiceConfig(
+                        root.state.serviceConfigs,
+                        service,
+                        { enabled: value }),
+                    needRestart: true
+                });
+            },
+            onFMSChange: (service, value) => {
+                server.nginxConfig.setFms(service, value);
+                root.setState({
+                    serviceConfigs: updateServiceConfig(
+                        root.state.serviceConfigs,
+                        service,
+                        { fms: value }),
+                    needRestart: true
+                });
+            },
+            onStreamKeyChange: (service, value) => {
+                server.nginxConfig.setKey(service, value);
+                root.setState({
+                    serviceConfigs: updateServiceConfig(
+                        root.state.serviceConfigs,
+                        service,
+                        { key: value }),
+                    needRestart: true
+                });
             },
             onRestart: () => {
                 server.restart();
@@ -128,39 +161,20 @@ function initUI(server: Server) {
     addEventListener("unload", () => {
         server.save();
     });
-    SERVICES.forEach(x => {
-        let enabled = server.nginxConfig.enabled(x);
-        if (enabled) {
-            $(`#${x}-check`).show();
-        } else {
-            $(`#${x}-check`).hide();
-        }
-        $(`#${x}-enabled`)
-            .prop(enabled ? "checked" : "", "checked")
-            .change(function() {
-                if ($(this).prop("checked")) {
-                    $(`#${x}-check`).show();
-                    server.nginxConfig.enable(x);
-                } else {
-                    $(`#${x}-check`).hide();
-                    server.nginxConfig.disable(x);
-                }
-                root.setState({ needRestart: true });
-            });
-        $(`#${x}-fms`)
-            .val(server.nginxConfig.fms(x))
-            .change(function() {
-                server.nginxConfig.setFms(x, $(this).val());
-                root.setState({ needRestart: true });
-            });
-        $(`#${x}-key`)
-            .val(server.nginxConfig.key(x))
-            .change(function() {
-                server.nginxConfig.setKey(x, $(this).val());
-                root.setState({ needRestart: true });
-            });
-    });
-    $("#root").fadeIn("fast");
+    let main = (<HTMLElement>document.getElementsByTagName("main")[0]);
+    main.style.transition = "opacity 0.3s";
+    main.style.opacity = "1";
+}
+
+function updateServiceConfig(
+    serviceConfigs: ServiceConfig[],
+    service: string,
+    config: any
+) {
+    let list = serviceConfigs.concat();
+    let idx = list.findIndex(x => x.name === service);
+    list[idx] = Object.assign({}, list[idx], config);
+    return list;
 }
 
 main().catch(e => {
