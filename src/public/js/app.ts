@@ -108,7 +108,7 @@ async function main() {
             },
             onRestart: () => {
                 server.restart();
-                root.setState({ needRestart: true });
+                root.setState({ needRestart: false });
             }
         }),
         document.getElementsByTagName("main")[0]);
