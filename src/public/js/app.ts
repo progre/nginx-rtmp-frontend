@@ -4,39 +4,40 @@ import * as React from "react";
 import * as ReactDOM from "react-dom";
 import * as i18n from "i18next";
 const XHR = require("i18next-xhr-backend");
-const Cache = require("i18next-localstorage-cache");
-import * as sprintf from "i18next-sprintf-postprocessor";
 const LanguageDetector = require("i18next-browser-languagedetector");
 import Root, {Props} from "./component/root";
 import Server from "./server";
 import {ServiceConfig} from "./domain/domains";
-const eRequire = require;
-const remote = eRequire("electron").remote;
+const remote = (<any>window).require("electron").remote;
 const Menu = remote.Menu;
 const SERVICES = ["twitch", "peercaststation", "cavetube", "livecodingtv", "niconico", "other"];
 
 async function main() {
-    await new Promise((resolve, reject) =>
-        $(resolve));
-    await new Promise((resolve, reject) =>
-        i18n.use(XHR)
-            .use(Cache)
-            .use(LanguageDetector)
-            .use(sprintf)
-            .init(
-            {
-                backend: {
-                    loadPath: "./locales/{{lng}}/{{ns}}.json"
+    await Promise.all([
+        new Promise(resolve => {
+            document.addEventListener("DOMContentLoaded", function onDOMContentLoaded() {
+                document.removeEventListener("DOMContentLoaded", onDOMContentLoaded);
+                resolve();
+            });
+        }),
+        new Promise((resolve, reject) =>
+            i18n.use(XHR)
+                .use(LanguageDetector)
+                .init(
+                {
+                    backend: {
+                        loadPath: "./locales/{{lng}}/{{ns}}.json"
+                    },
+                    lng: navigator.language
                 },
-                lng: navigator.language
-            },
-            resolve));
+                resolve))
+    ]);
     let server = Server.create();
     let root = ReactDOM.render(
         React.createElement(Root, <Props>{
             initialState: {
                 nginxPath: server.config.exePath,
-                port: server.config.exePath,
+                port: server.config.port,
                 needRestart: false,
                 serviceConfigs: SERVICES.map(x => ({
                     name: x,
@@ -111,13 +112,6 @@ async function main() {
             }
         }),
         document.getElementsByTagName("main")[0]);
-    $("[class*=i18n-]").each((i, elem) => {
-        let key = elem.className
-            .split(" ")
-            .filter(x => x.indexOf("i18n-") === 0)[0]
-            .slice("i18n-".length);
-        $(elem).html(i18n.t(key));
-    });
     initShortcutKey();
     initUI(server);
 }

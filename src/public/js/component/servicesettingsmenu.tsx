@@ -15,6 +15,7 @@ export default function ServiceSettingsMenu(props: {
                     let definition = props.serviceDefinitions.find(x => x.name === name);
                     let config = props.serviceConfigs.find(x => x.name === name);
                     return <MenuItem
+                        key={definition.name}
                         primary={name === props.selectedService}
                         serviceDefinition={definition }
                         serviceConfig={config }
@@ -41,7 +42,7 @@ function MenuItem(props: {
                 onerror="this.style.display = 'none';"/>
         </span>
         <span style={{ marginLeft: "0.5em" }} className="pull-left">
-            {props.serviceDefinition.name}
+            {props.serviceDefinition.label}
         </span>
         <span className="pull-right">
             <i id={`${props.serviceDefinition.name}-check`}

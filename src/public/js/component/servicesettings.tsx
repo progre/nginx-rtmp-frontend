@@ -1,4 +1,5 @@
 import * as React from "react";
+import {t} from "i18next";
 import {ServiceConfig} from "../domain/domains";
 import ServiceSettingsMenu from "./servicesettingsmenu";
 import ServiceSettingsContents from "./servicesettingscontents";
@@ -68,7 +69,7 @@ export default class ServiceSettings extends React.Component<Props, State> {
         let selectedDefinition = SERVICES.find(x => x.name === selected);
         let selectedConfig = this.props.serviceConfigs.find(x => x.name === selected);
         return <fieldset>
-            <legend className="i18n-service-settings"></legend>
+            <legend>{t("service-settings")}</legend>
             <div className="row">
                 <ServiceSettingsMenu
                     serviceDefinitions={SERVICES}

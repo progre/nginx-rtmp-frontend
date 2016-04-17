@@ -48,7 +48,7 @@ export default function ServiceSettingsContents(props: {
                                 (e.target as HTMLInputElement).value) }>
                             {
                                 props.twitchIngests.map(ingest =>
-                                    <option value={ingest.url}>
+                                    <option key={ingest.name} value={ingest.url}>
                                         {ingest.name}
                                     </option>)
                             }
@@ -67,9 +67,8 @@ export default function ServiceSettingsContents(props: {
         {
             props.definition.name === "peercaststation"
                 ? <div className="row">
-                    <div className="col-sm-push-3 col-sm-9">
-                        {t("notification-for-peercaststation") }
-                    </div>
+                    <div className="col-sm-push-3 col-sm-9"
+                        dangerouslySetInnerHTML={{ __html: t("notification-for-peercaststation") }}/>
                 </div>
                 : <div className="row">
                     <div className="col-sm-3 text-right">
