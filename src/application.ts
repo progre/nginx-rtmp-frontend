@@ -7,7 +7,8 @@ import TrayIcon from "./ui/trayicon";
 import {createMainWindow} from "./ui/windowfactory";
 import {initMenu} from "./ui/appmenu";
 import Nginx from "./service/nginx";
-import {default as Repository, Config} from "./service/repository";
+import migrate from "./service/configmigrator";
+import Repository, {Config} from "./service/repository";
 import NginxConfig from "./service/nginxconfig";
 const fetch = require("node-fetch");
 
@@ -22,7 +23,8 @@ export default class Application {
         let [, [repository, config, nginxConfig], ingests] = await Promise.all<any>([
             new Promise((resolve, reject) => app.once("ready", resolve))
                 .then(() => keepAlive()),
-            Repository.new()
+            migrate()
+                .then(Repository.new)
                 .then(repository => Promise.all<any>([
                     repository,
                     repository.getConfig(),

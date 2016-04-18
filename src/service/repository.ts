@@ -28,7 +28,10 @@ export default class Repository {
             return <Config>JSON.parse(data);
         } catch (e) {
             return <Config>{
-                exePath: ""
+                exePath: "",
+                listenPort: 0,
+                nginxPath: "",
+                services: []
             };
         }
     }
@@ -39,5 +42,12 @@ export default class Repository {
 }
 
 export interface Config {
+    /** @deprecated */
     exePath: string;
+    listenPort: number;
+    nginxPath: string;
+    services: {
+        fmsURL: string;
+        streamKey: string;
+    }[]
 }
