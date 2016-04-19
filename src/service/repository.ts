@@ -28,7 +28,7 @@ export default class Repository {
             return <Config>JSON.parse(data);
         } catch (e) {
             return <Config>{
-                exePath: "",
+                /** @deprecated */ exePath: "",
                 listenPort: 0,
                 nginxPath: "",
                 services: []
@@ -42,11 +42,11 @@ export default class Repository {
 }
 
 export interface Config {
-    /** @deprecated */
-    exePath: string;
+    /** @deprecated */ exePath: string;
     listenPort: number;
     nginxPath: string;
     services: {
+        enabled: boolean;
         fmsURL: string;
         streamKey: string;
     }[]
