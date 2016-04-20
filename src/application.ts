@@ -24,7 +24,7 @@ export default class Application {
             new Promise((resolve, reject) => app.once("ready", resolve))
                 .then(() => keepAlive()),
             migrate()
-                .then(Repository.new)
+                .then(() => Repository.new())
                 .then(repository => Promise.all<any>([
                     repository,
                     repository.getConfig(),
