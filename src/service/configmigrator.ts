@@ -24,6 +24,7 @@ export default async function migrate() {
         listenPort: nginxConfig.port,
         nginxPath: config.exePath,
         services: SERVICES.map(service => ({
+            name: service,
             enabled: nginxConfig.enabled(service),
             fmsURL: nginxConfig.fms(service),
             streamKey: nginxConfig.key(service)

@@ -5,11 +5,12 @@ import * as ReactDOM from "react-dom";
 import * as i18n from "i18next";
 const XHR = require("i18next-xhr-backend");
 const LanguageDetector = require("i18next-browser-languagedetector");
+const remote = (<any>window).require("electron").remote;
+const Menu = remote.Menu;
 import Root, {Props} from "./component/root";
 import Server from "./server";
 import {ServiceConfig} from "./domain/domains";
-const remote = (<any>window).require("electron").remote;
-const Menu = remote.Menu;
+import Browser from "../../service/browser";
 const SERVICES = ["twitch", "peercaststation", "cavetube", "livecodingtv", "niconico", "other"];
 
 async function main() {
@@ -169,6 +170,10 @@ function updateServiceConfig(
     let idx = list.findIndex(x => x.name === service);
     list[idx] = Object.assign({}, list[idx], config);
     return list;
+}
+
+function getBrowser() {
+    // return remote.getGlobal("browser");
 }
 
 main().catch(e => {

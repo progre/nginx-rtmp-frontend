@@ -6,6 +6,7 @@ const logger = log4js.getLogger();
 import TrayIcon from "./ui/trayicon";
 import {createMainWindow} from "./ui/windowfactory";
 import {initMenu} from "./ui/appmenu";
+import Browser from "./service/browser";
 import Nginx from "./service/nginx";
 import migrate from "./service/configmigrator";
 import Repository, {Config} from "./service/repository";
@@ -74,38 +75,7 @@ export default class Application {
             visitor.event("ui", "click").send();
         });
 
-        let self = this;
-        (<any>global).mainProcess = {
-            config,
-            nginxConfig: {
-                port() { return nginxConfig.port; },
-                setPort(value: number) { nginxConfig.port = value; },
-                fms(service: string) { return nginxConfig.fms(service); },
-                setFms(service: string, fms: string) { nginxConfig.setFms(service, fms); },
-                key(service: string) { return nginxConfig.key(service); },
-                setKey(service: string, key: string) { nginxConfig.setKey(service, key); },
-                enabled(service: string) { return nginxConfig.enabled(service); },
-                enable(service: string) { nginxConfig.enable(service); },
-                disable(service: string) { nginxConfig.disable(service); }
-            },
-            ingests,
-            save() {
-                Promise.all([
-                    repository.setConfig(config),
-                    nginxConfig.save()
-                ]).catch(e => {
-                    logger.error(e);
-                });
-                visitor.event("ui", "save").send();
-            },
-            restart() {
-                self.stopServer();
-                self.startServer();
-                visitor
-                    .event("ui", "restart", broadcastingServices(nginxConfig).join(", "))
-                    .send();
-            }
-        };
+        exportToRenderer(new Browser(repository, () => this.restart()));
     }
 
     release() {
@@ -129,11 +99,23 @@ export default class Application {
     private startServer() {
         this.nginx.start(this.config.exePath);
         this.trayIcon.running = true;
+        visitor
+            .event("ui", "start", broadcastingServices(this.nginxConfig).join(", "))
+            .send();
     }
 
     private stopServer() {
         this.nginx.stop();
     }
+
+    private restart() {
+        this.stopServer();
+        this.startServer();
+    }
+}
+
+function exportToRenderer(browser: Browser) {
+    (<any>window).browser = browser;
 }
 
 function keepAlive() {

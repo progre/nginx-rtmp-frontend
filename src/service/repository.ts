@@ -37,6 +37,17 @@ export default class Repository {
     }
 
     setConfig(config: Config) {
+        this.nginxConfig.port = config.listenPort;
+        for (let service of config.services) {
+            if (service.enabled) {
+                this.nginxConfig.enable(service.name);
+            } else {
+                this.nginxConfig.disable(service.name);
+            }
+            this.nginxConfig.setFms(service.name, service.fmsURL);
+            this.nginxConfig.setKey(service.name, service.streamKey);
+        }
+        this.nginxConfig.save();
         return writeFile(CONFIG_PATH, JSON.stringify(config), { encoding: "ascii", flag: "w+" });
     }
 }
@@ -46,6 +57,7 @@ export interface Config {
     listenPort: number;
     nginxPath: string;
     services: {
+        name: string;
         enabled: boolean;
         fmsURL: string;
         streamKey: string;
