@@ -1,8 +1,8 @@
 const app = require("app");
 const BrowserWindow = require("browser-window");
+import {getLogger} from "log4js";
+const logger = getLogger();
 import {visitor} from "./service/gafactory";
-import * as log4js from "log4js";
-const logger = log4js.getLogger();
 import TrayIcon from "./ui/trayicon";
 import {createMainWindow} from "./ui/windowfactory";
 import {initMenu} from "./ui/appmenu";
@@ -10,33 +10,35 @@ import Browser from "./service/browser";
 import Nginx from "./service/nginx";
 import migrate from "./service/configmigrator";
 import Repository, {Config} from "./service/repository";
-import NginxConfig from "./service/nginxconfig";
 const fetch = require("node-fetch");
-
-const SERVICES = ["twitch", "peercaststation", "cavetube", "livecodingtv", "niconico", "other"];
 
 export default class Application {
     private nginx = new Nginx();
     private trayIcon = new TrayIcon();
     private mainWindow: Electron.BrowserWindow = null;
 
-    static async new() {
-        let [, [repository, config, nginxConfig], ingests] = await Promise.all<any>([
-            new Promise((resolve, reject) => app.once("ready", resolve))
-                .then(() => keepAlive()),
-            migrate()
-                .then(() => Repository.new())
-                .then(repository => Promise.all<any>([
-                    repository,
-                    repository.getConfig(),
-                    repository.nginxConfig
-                ])),
+    static async create() {
+        logger.debug("Start initialize.");
+        let [, [repo, config], ingests] = await Promise.all<any>([
+            // new Promise((resolve, reject) => app.once("ready", resolve))
+            //     .then(() => keepAlive()),
+            keepAlive(),
+            (async () => {
+                await migrate();
+                let repo = await Repository.create();
+
+                return Promise.all<any>([
+                    repo,
+                    repo.getConfig()
+                ]);
+            })(),
             fetch("https://api.twitch.tv/kraken/ingests")
                 .then((res: any) => res.json())
                 .then((json: any) => json.ingests)
         ]);
-        let instance = new Application(repository, config, nginxConfig, ingests);
-        if (repository == null || config == null || nginxConfig == null) {
+        logger.debug("Finish initialize.");
+        let instance = new Application(repo, config, ingests);
+        if (repo == null || config == null) {
             instance.showMainWindow();
             return instance;
         }
@@ -47,16 +49,12 @@ export default class Application {
     constructor(
         private repository: Repository,
         private config: Config,
-        private nginxConfig: NginxConfig,
-        ingests: any
+        twitchIngests: any
     ) {
         visitor.pageview("/").send();
 
         initMenu();
 
-        app.addListener("quit", () => {
-            this.release();
-        });
         this.nginx.on("close", () => {
             this.trayIcon.running = false;
             visitor.event("ui", "close").send();
@@ -75,11 +73,7 @@ export default class Application {
             visitor.event("ui", "click").send();
         });
 
-        exportToRenderer(new Browser(repository, () => this.restart()));
-    }
-
-    release() {
-        this.repository.release();
+        exportToRenderer(new Browser(repository, twitchIngests, () => this.restart()));
     }
 
     private showMainWindow() {
@@ -97,10 +91,10 @@ export default class Application {
     }
 
     private startServer() {
-        this.nginx.start(this.config.exePath);
+        this.nginx.start(this.config.nginxPath);
         this.trayIcon.running = true;
         visitor
-            .event("ui", "start", broadcastingServices(this.nginxConfig).join(", "))
+            .event("ui", "start", broadcastingServices(this.config).join(", "))
             .send();
     }
 
@@ -124,6 +118,6 @@ function keepAlive() {
     /* tslint:enable:no-unused-expression */
 }
 
-function broadcastingServices(nginxConfig: NginxConfig) {
-    return SERVICES.filter(x => nginxConfig.enabled(x));
+function broadcastingServices(config: Config) {
+    return config.services.filter(x => x.enabled).map(x => x.name);
 }

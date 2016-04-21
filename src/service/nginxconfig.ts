@@ -3,243 +3,43 @@ import * as promisify from "native-promisify";
 const NginxConfFile = require("nginx-conf").NginxConfFile;
 const create = promisify(NginxConfFile.create);
 
-const exists = (path: string) =>
-    new Promise((resolve, reject) => fs.exists(path, resolve));
-
-export default class NginxConfig {
-    private enabledServices: EnabledServices;
-    private disabledServices: DisabledServices;
-
-    static async new(configPath: string, configTemplatePath: string) {
-        if (!(await exists(configPath))) {
-            await new Promise((resolve, reject) =>
-                fs.createReadStream(configTemplatePath)
-                    .pipe(fs.createWriteStream(configPath))
-                    .once("error", reject)
-                    .once("close", resolve));
+export async function write(
+    configPath: string,
+    configTemplatePath: string,
+    config: Config
+) {
+    await new Promise((resolve, reject) =>
+        fs.createReadStream(configTemplatePath)
+            .pipe(fs.createWriteStream(configPath))
+            .once("error", reject)
+            .once("close", resolve));
+    let conf = await create(configPath);
+    if (conf.nginx == null) {
+        require("dialog").showMessageBox({ message: "test", buttons: ["test"] });
+        throw new Error();
+    }
+    conf.nginx.rtmp.server.listen._value = config.listenPort;
+    require("dialog").showMessageBox({ message: "1", buttons: ["test"] });
+    for (let service of config.services) {
+    require("dialog").showMessageBox({ message: "2" + service, buttons: ["test"] });
+    require("dialog").showMessageBox({ message: "2" + service.enabled + service.fmsURL + service.streamKey == null, buttons: ["test"] });
+        if (!service.enabled) {
+            continue;
         }
-        return new this(configPath, await create(configPath));
+        this.container._add("push", `${service.fmsURL} playpath=${service.streamKey}`);
     }
-
-    constructor(private configPath: string, private conf: any) {
-        this.enabledServices = new EnabledServices(conf.nginx.rtmp.server.application);
-        this.disabledServices = new DisabledServices(conf.nginx.rtmp._comments);
-    }
-
-    release() {
-        this.conf.die(this.configPath);
-    }
-
-    get port() {
-        return <number>this.server.listen._value;
-    }
-
-    set port(value: number) {
-        this.server.listen._value = value;
-    }
-
-    fms(service: string) {
-        let e = this.enabledServices.get(service);
-        if (e != null) {
-            return e.fms;
-        }
-        let d = this.disabledServices.get(service);
-        if (d != null) {
-            return d.fms;
-        }
-        return null;
-    }
-
-    setFms(service: string, fms: string) {
-        let e = this.enabledServices.get(service);
-        if (e != null) {
-            this.enabledServices.update(e, { fms });
-            return;
-        }
-        let d = this.disabledServices.get(service);
-        if (d != null) {
-            this.disabledServices.update(d, { fms });
-            return;
-        }
-        this.disabledServices.add({ service, fms, key: "" });
-    }
-
-    key(service: string) {
-        let e = this.enabledServices.get(service);
-        if (e != null) {
-            return e.key;
-        }
-        let d = this.disabledServices.get(service);
-        if (d != null) {
-            return d.key;
-        }
-        return null;
-    }
-
-    setKey(service: string, key: string) {
-        let e = this.enabledServices.get(service);
-        if (e != null) {
-            this.enabledServices.update(e, { key });
-            return;
-        }
-        let d = this.disabledServices.get(service);
-        if (d != null) {
-            this.disabledServices.update(d, { key });
-            return;
-        }
-        this.disabledServices.add({ service, fms: "", key });
-    }
-
-    enabled(service: string) {
-        return this.enabledServices.get(service) != null;
-    }
-
-    enable(service: string) {
-        let item = this.disabledServices.get(service);
-        if (item != null) {
-            this.disabledServices.remove(item);
-            this.enabledServices.add(item);
-        } else {
-            this.enabledServices.add({ service, fms: "", key: "" });
-        }
-    }
-
-    disable(service: string) {
-        let item = this.enabledServices.get(service);
-        if (item == null) {
-            return;
-        }
-        this.enabledServices.remove(item);
-        this.disabledServices.add(item);
-    }
-
-    save() {
-        this.conf.flush();
-    }
-
-    private get application() {
-        return this.server.application;
-    }
-
-    private get server() {
-        return this.conf.nginx.rtmp.server;
-    }
+    require("dialog").showMessageBox({ message: "2", buttons: ["test"] });
+    conf.flush();
+    require("dialog").showMessageBox({ message: "3", buttons: ["test"] });
+    conf.die(configPath);
+    require("dialog").showMessageBox({ message: "4", buttons: ["test"] });
 }
 
-interface Service {
-    index: number;
-    service: string;
-    fms: string;
-    key: string;
-}
-
-class EnabledServices {
-    constructor(private container: any) {
-    }
-
-    get(service: string) {
-        let items = this.items()
-            .filter(x => x.service === service);
-        if (items.length <= 0) {
-            return null;
-        }
-        return items[0];
-    }
-
-    update(item: Service, data: { fms?: string, key?: string }) {
-        let i = this.getPushList()[item.index];
-        let [fms, key] = i._value.split(" ");
-        key = key.replace(/^playpath=/, "");
-        if (data.fms != null) {
-            fms = data.fms;
-        }
-        if (data.key != null) {
-            key = data.key;
-        }
-        i._value = `${fms} playpath=${key}`;
-    }
-
-    add(item: { service: string, fms: string, key: string }) {
-        this.container._add("push", `${item.fms} playpath=${item.key}`);
-        let list = this.getPushList();
-        list[list.length - 1]._comments.push(item.service);
-    }
-
-    remove(item: Service) {
-        this.container._remove("push", item.index);
-    }
-
-    private items() {
-        return this.getPushList()
-            .map((x, index) => {
-                let [fms, key] = (<string>x._value).split(" ");
-                if (key == null) {
-                    key = "";
-                }
-                return <Service>{
-                    index,
-                    service: x._comments[0],
-                    fms,
-                    key: key.replace(/^playpath=/, "")
-                };
-            });
-    }
-
-    private getPushList() {
-        let push = this.container.push;
-        if (push == null) {
-            return [];
-        }
-        if (!(push instanceof Array)) {
-            return [push];
-        }
-        return <any[]>push;
-    }
-}
-
-class DisabledServices {
-    constructor(private container: string[]) {
-    }
-
-    get(service: string) {
-        let items = this.items()
-            .filter(x => x.service === service);
-        if (items.length <= 0) {
-            return null;
-        }
-        return items[0];
-    }
-
-    update(item: Service, data: { fms?: string, key?: string }) {
-        let [service, fms, key] = this.container[item.index].split(" ");
-        key = key.replace(/^playpath=/, "");
-        if (data.fms != null) {
-            fms = data.fms;
-        }
-        if (data.key != null) {
-            key = data.key;
-        }
-        this.container[item.index] = `${service} ${fms} ${key}`;
-    }
-
-    add(item: { service: string, fms: string, key: string }) {
-        this.container.push(`${item.service} ${item.fms} ${item.key}`);
-    }
-
-    remove(item: Service) {
-        this.container.splice(item.index, 1);
-    }
-
-    private items() {
-        return this.container
-            .map((x, index) => {
-                let [service, fms, key] = x.split(" ");
-                return <Service>{
-                    index,
-                    service,
-                    fms,
-                    key: key.replace(/^playpath=/, "")
-                };
-            });
-    }
+interface Config {
+    listenPort: number;
+    services: {
+        enabled: boolean;
+        fmsURL: string;
+        streamKey: string;
+    }[];
 }

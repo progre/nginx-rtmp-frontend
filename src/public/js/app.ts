@@ -8,46 +8,47 @@ const LanguageDetector = require("i18next-browser-languagedetector");
 const remote = (<any>window).require("electron").remote;
 const Menu = remote.Menu;
 import Root, {Props} from "./component/root";
-import Server from "./server";
 import {ServiceConfig} from "./domain/domains";
 import Browser from "../../service/browser";
-const SERVICES = ["twitch", "peercaststation", "cavetube", "livecodingtv", "niconico", "other"];
 
 async function main() {
     await Promise.all([
         new Promise(resolve => {
-            document.addEventListener("DOMContentLoaded", function onDOMContentLoaded() {
-                document.removeEventListener("DOMContentLoaded", onDOMContentLoaded);
-                resolve();
-            });
+            document.addEventListener(
+                "DOMContentLoaded",
+                function onDOMContentLoaded() {
+                    document.removeEventListener(
+                        "DOMContentLoaded",
+                        onDOMContentLoaded);
+                    resolve();
+                });
         }),
         new Promise((resolve, reject) =>
             i18n.use(XHR)
                 .use(LanguageDetector)
                 .init(
                 {
-                    backend: {
-                        loadPath: "./locales/{{lng}}/{{ns}}.json"
-                    },
+                    backend: { loadPath: "./locales/{{lng}}/{{ns}}.json" },
                     lng: navigator.language
                 },
                 resolve))
     ]);
-    let server = Server.create();
+    let browser = getBrowser();
+    let config = await browser.getConfig();
     let root = ReactDOM.render(
         React.createElement(Root, <Props>{
             initialState: {
-                nginxPath: server.config.exePath,
-                port: server.config.port,
+                nginxPath: config.nginxPath,
+                port: config.listenPort,
                 needRestart: false,
-                serviceConfigs: SERVICES.map(x => ({
-                    name: x,
-                    enabled: server.nginxConfig.enabled(x),
-                    fms: server.nginxConfig.fms(x),
-                    key: server.nginxConfig.key(x)
+                serviceConfigs: config.services.map(x => ({
+                    name: x.name,
+                    enabled: x.enabled,
+                    fms: x.fmsURL,
+                    key: x.streamKey
                 }))
             },
-            twitchIngests: server.ingests
+            twitchIngests: browser.twitchIngests
                 .sort((a, b) =>
                     a.name === b.name ? 0 : a.name < b.name ? -1 : 1)
                 .map(x => ({
@@ -55,30 +56,35 @@ async function main() {
                     url: (<string>x.url_template).replace("/{stream_key}", "")
                 })),
             onNginxPathSelectorLaunch: async () => {
-                let fileName = await server.showOpenDialog();
+                let fileName = await browser.showOpenDialog();
                 if (fileName == null) {
                     return;
                 }
-                server.config.exePath = fileName;
+                browser.setConfig(Object.assign(
+                    await browser.getConfig(),
+                    { nginxPath: fileName }));
                 root.setState({ nginxPath: fileName });
             },
-            onNginxPathChange: path => {
-                server.config.exePath = path;
+            onNginxPathChange: async (path) => {
+                browser.setConfig(Object.assign(
+                    await browser.getConfig(),
+                    { nginxPath: path }));
                 root.setState({ nginxPath: path });
             },
-            onPortChange: port => {
+            onPortChange: async (port) => {
                 if (port == null || Number.isNaN(port)) {
                     port = 1935;
                 }
-                server.nginxConfig.setPort(port);
+                browser.setConfig(Object.assign(
+                    await browser.getConfig(),
+                    { listenPort: port }));
                 root.setState({ port });
             },
-            onEnabledChange: (service, value) => {
-                if (value) {
-                    server.nginxConfig.enable(service);
-                } else {
-                    server.nginxConfig.disable(service);
-                }
+            onEnabledChange: async (service, value) => {
+                let config = await browser.getConfig();
+                config.services
+                    .filter(x => x.name === service)[0].enabled = value;
+                browser.setConfig(config);
                 root.setState({
                     serviceConfigs: updateServiceConfig(
                         root.state.serviceConfigs,
@@ -87,8 +93,11 @@ async function main() {
                     needRestart: true
                 });
             },
-            onFMSChange: (service, value) => {
-                server.nginxConfig.setFms(service, value);
+            onFMSChange: async (service, value) => {
+                let config = await browser.getConfig();
+                config.services
+                    .filter(x => x.name === service)[0].fmsURL = value;
+                browser.setConfig(config);
                 root.setState({
                     serviceConfigs: updateServiceConfig(
                         root.state.serviceConfigs,
@@ -97,8 +106,11 @@ async function main() {
                     needRestart: true
                 });
             },
-            onStreamKeyChange: (service, value) => {
-                server.nginxConfig.setKey(service, value);
+            onStreamKeyChange: async (service, value) => {
+                let config = await browser.getConfig();
+                config.services
+                    .filter(x => x.name === service)[0].streamKey = value;
+                browser.setConfig(config);
                 root.setState({
                     serviceConfigs: updateServiceConfig(
                         root.state.serviceConfigs,
@@ -108,13 +120,13 @@ async function main() {
                 });
             },
             onRestart: () => {
-                server.restart();
+                browser.restart();
                 root.setState({ needRestart: false });
             }
         }),
         document.getElementsByTagName("main")[0]);
     initShortcutKey();
-    initUI(server);
+    initUI();
 }
 
 function initShortcutKey() {
@@ -149,13 +161,7 @@ function initShortcutKey() {
         false);
 }
 
-function initUI(server: Server) {
-    addEventListener("blur", () => {
-        server.save();
-    });
-    addEventListener("unload", () => {
-        server.save();
-    });
+function initUI() {
     let main = (<HTMLElement>document.getElementsByTagName("main")[0]);
     main.style.transition = "opacity 0.3s";
     main.style.opacity = "1";
@@ -173,7 +179,7 @@ function updateServiceConfig(
 }
 
 function getBrowser() {
-    // return remote.getGlobal("browser");
+    return <Browser>remote.getGlobal("browser");
 }
 
 main().catch(e => {

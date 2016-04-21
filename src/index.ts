@@ -10,9 +10,11 @@ log4js.configure({
     appenders: [{ type: "console", layout: { type: "basic" } }]
 });
 
-Application.new()
-    .catch(e => {
-        log4js.getLogger().fatal(e);
-        visitor.exception(e).send();
-        app.quit();
-    });
+app.once("ready", () => {
+    Application.create()
+        .catch(e => {
+            log4js.getLogger().fatal(e);
+            visitor.exception(e).send();
+            app.quit();
+        });
+});

@@ -3,7 +3,11 @@ const dialog: Electron.Dialog = require("dialog");
 import Repository, {Config} from "./repository";
 
 export default class Browser {
-    constructor(private repo: Repository, public restart: () => void) {
+    constructor(
+        private repo: Repository,
+        public twitchIngests: any[],
+        public restart: () => void
+    ) {
     }
 
     getConfig() {

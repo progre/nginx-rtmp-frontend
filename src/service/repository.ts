@@ -4,56 +4,86 @@ import * as fs from "fs";
 const readFile = promisify(fs.readFile);
 const writeFile = promisify(fs.writeFile);
 import {normalize} from "path";
-import NginxConfig from "./nginxconfig";
+import {write as writeNginxConfig} from "./nginxconfig";
 
-const CONFIG_PATH = app.getPath("userData") + "/" + "config.json";
-export const NGINX_CONFIG_PATH = app.getPath("userData") + "/" + "nginx.conf";
-const NGINX_CONFIG_TEMPLATE_PATH = normalize(__dirname + "/../res/nginx-default.conf");
+const SERVICES = ["twitch", "peercaststation", "cavetube", "livecodingtv", "niconico", "other"];
 
 export default class Repository {
-    static async new() {
-        return new this(await NginxConfig.new(NGINX_CONFIG_PATH, NGINX_CONFIG_TEMPLATE_PATH));
-    }
-
-    constructor(public nginxConfig: NginxConfig) {
-    }
-
-    release() {
-        this.nginxConfig.release();
+    static async create() {
+        let instance = new this();
+        await writeNginxConfig(
+            getNginxConfigPath(),
+            getNginxConfigTemplatePath(),
+            await instance.getConfig());
+        return instance;
     }
 
     async getConfig() {
+        let config: Config;
         try {
-            let data = await readFile(CONFIG_PATH, "ascii");
-            return <Config>JSON.parse(data);
+            let data = await readFile(getConfigPath(), "ascii");
+            config = <Config>JSON.parse(data);
         } catch (e) {
-            return <Config>{
-                /** @deprecated */ exePath: "",
-                listenPort: 0,
-                nginxPath: "",
-                services: []
-            };
+            config = <Config>{};
         }
+        if (config.listenPort == null) {
+            config.listenPort = 1935;
+        }
+        if (config.nginxPath == null) {
+            config.nginxPath = "";
+        }
+        if (config.services == null) {
+            config.services = [];
+        }
+        for (let service of SERVICES) {
+            let configService = config.services.find(x => x.name === service);
+            if (configService == null) {
+                config.services.push({
+                    name: service,
+                    enabled: false,
+                    fmsURL: "",
+                    streamKey: ""
+                });
+                continue;
+            }
+            if (configService.enabled == null) {
+                configService.enabled = false;
+            }
+            if (configService.fmsURL == null) {
+                configService.fmsURL = "";
+            }
+            if (configService.streamKey == null) {
+                configService.streamKey = "";
+            }
+        }
+        return config;
     }
 
     setConfig(config: Config) {
-        this.nginxConfig.port = config.listenPort;
-        for (let service of config.services) {
-            if (service.enabled) {
-                this.nginxConfig.enable(service.name);
-            } else {
-                this.nginxConfig.disable(service.name);
-            }
-            this.nginxConfig.setFms(service.name, service.fmsURL);
-            this.nginxConfig.setKey(service.name, service.streamKey);
-        }
-        this.nginxConfig.save();
-        return writeFile(CONFIG_PATH, JSON.stringify(config), { encoding: "ascii", flag: "w+" });
+        writeNginxConfig(
+            getNginxConfigPath(),
+            getNginxConfigTemplatePath(),
+            config);
+        return writeFile(
+            getConfigPath(),
+            JSON.stringify(config),
+            { encoding: "ascii", flag: "w+" });
     }
 }
 
+function getConfigPath() {
+    return app.getPath("userData") + "/" + "config.json";
+}
+
+export function getNginxConfigPath() {
+    return app.getPath("userData") + "/" + "nginx.conf";
+}
+
+function getNginxConfigTemplatePath() {
+    return normalize(__dirname + "/../res/nginx-default.conf");
+}
+
 export interface Config {
-    /** @deprecated */ exePath: string;
     listenPort: number;
     nginxPath: string;
     services: {
@@ -61,5 +91,5 @@ export interface Config {
         enabled: boolean;
         fmsURL: string;
         streamKey: string;
-    }[]
+    }[];
 }

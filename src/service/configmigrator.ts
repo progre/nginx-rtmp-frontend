@@ -18,9 +18,9 @@ export default async function migrate() {
     if (nginxConfig == null) {
         return;
     }
-    let repo = await Repository.new();
+    let repo = await Repository.create();
+    require("dialog").showMessageBox({ message: "test", buttons: ["test"] });
     repo.setConfig({
-        /** @deprecated */ exePath: config.exePath,
         listenPort: nginxConfig.port,
         nginxPath: config.exePath,
         services: SERVICES.map(service => ({
@@ -62,7 +62,11 @@ class NginxConfig {
         if (!(await exists(configPath))) {
             return <NginxConfig>null;
         }
-        return new this(configPath, await create(configPath));
+        try {
+            return new this(configPath, await create(configPath));
+        } catch (e) {
+            return <NginxConfig>null;
+        }
     }
 
     constructor(private configPath: string, private conf: any) {

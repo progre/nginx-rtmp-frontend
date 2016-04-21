@@ -10,14 +10,14 @@ export default class Nginx extends EventEmitter {
     private process: ChildProcess;
 
     start(exePath: string) {
-        logger.info("Server starting: ", exePath, "-c", repository.NGINX_CONFIG_PATH);
+        logger.info("Server starting: ", exePath, "-c", repository.getNginxConfigPath());
         this.exePath = exePath;
         if (exePath == null || exePath.length === 0) {
             this.exePath = "nginx";
         }
         let process = spawn(
             this.exePath,
-            ["-c", repository.NGINX_CONFIG_PATH],
+            ["-c", repository.getNginxConfigPath()],
             { cwd: dirname(this.exePath) }
         );
         process.on("error", (e: any) => {
