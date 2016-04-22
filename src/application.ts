@@ -20,9 +20,8 @@ export default class Application {
     static async create() {
         logger.debug("Start initialize.");
         let [, [repo, config], ingests] = await Promise.all<any>([
-            // new Promise((resolve, reject) => app.once("ready", resolve))
-            //     .then(() => keepAlive()),
-            keepAlive(),
+            new Promise((resolve, reject) => app.once("ready", resolve))
+                .then(() => keepAlive()),
             (async () => {
                 await migrate();
                 let repo = await Repository.create();
