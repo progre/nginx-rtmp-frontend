@@ -15,24 +15,17 @@ export async function write(
             .once("close", resolve));
     let conf = await create(configPath);
     if (conf.nginx == null) {
-        require("dialog").showMessageBox({ message: "test", buttons: ["test"] });
         throw new Error();
     }
     conf.nginx.rtmp.server.listen._value = config.listenPort;
-    require("dialog").showMessageBox({ message: "1", buttons: ["test"] });
     for (let service of config.services) {
-    require("dialog").showMessageBox({ message: "2" + service, buttons: ["test"] });
-    require("dialog").showMessageBox({ message: "2" + service.enabled + service.fmsURL + service.streamKey == null, buttons: ["test"] });
         if (!service.enabled) {
             continue;
         }
         this.container._add("push", `${service.fmsURL} playpath=${service.streamKey}`);
     }
-    require("dialog").showMessageBox({ message: "2", buttons: ["test"] });
     conf.flush();
-    require("dialog").showMessageBox({ message: "3", buttons: ["test"] });
     conf.die(configPath);
-    require("dialog").showMessageBox({ message: "4", buttons: ["test"] });
 }
 
 interface Config {

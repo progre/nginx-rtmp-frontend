@@ -49,7 +49,7 @@ export default class Application {
     constructor(
         private repository: Repository,
         private config: Config,
-        twitchIngests: any
+        twitchIngests: any[]
     ) {
         visitor.pageview("/").send();
 
@@ -109,7 +109,7 @@ export default class Application {
 }
 
 function exportToRenderer(browser: Browser) {
-    (<any>window).browser = browser;
+    (<any>global).browser = browser;
 }
 
 function keepAlive() {
