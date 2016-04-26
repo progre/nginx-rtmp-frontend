@@ -7,8 +7,10 @@ import Footer from "./footer";
 export interface Props {
     initialState: State;
     twitchIngests: { name: string; url: string; }[];
-    onNginxPathSelectorLaunch: () => void;
+    onNginxPathSelectorLaunch: () => Promise<string>;
     onNginxPathChange: (path: string) => void;
+    onFfmpegPathSelectorLaunch: () => Promise<string>;
+    onFfmpegPathChange: (path: string) => void;
     onPortChange: (port: number) => void;
     onEnabledChange: (service: string, value: boolean) => void;
     onFMSChange: (service: string, value: string) => void;
@@ -18,6 +20,7 @@ export interface Props {
 
 export interface State {
     nginxPath?: string;
+    ffmpegPath?: string;
     port?: number;
     needRestart?: boolean;
     serviceConfigs?: ServiceConfig[];
@@ -32,9 +35,15 @@ export default class Root extends React.Component<Props, State> {
         return <div className="container">
             <LocalSettings
                 nginxPath={this.state.nginxPath}
+                ffmpegPath={this.state.ffmpegPath}
                 port={this.state.port}
                 onNginxPathSelectorLaunch={this.props.onNginxPathSelectorLaunch}
                 onNginxPathChange={path => {
+                    this.setState({ needRestart: true });
+                    this.props.onNginxPathChange(path);
+                } }
+                onFfmpegPathSelectorLaunch={this.props.onFfmpegPathSelectorLaunch}
+                onFfmpegPathChange={path => {
                     this.setState({ needRestart: true });
                     this.props.onNginxPathChange(path);
                 } }
