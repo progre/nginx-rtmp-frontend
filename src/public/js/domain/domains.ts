@@ -1,7 +1,7 @@
 export interface ServiceDefinition {
     name: string;
-    icon: string;
-    url: string;
+    icon: string | null;
+    url: string | null;
     label: string;
 }
 

@@ -1,7 +1,7 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import * as uuid from "node-uuid";
-import {t} from "i18next";
+import { t } from "i18next";
 
 export interface Props {
     nginxPath: string;
@@ -18,12 +18,12 @@ export default class LocalSettings extends React.Component<Props, {}> {
         let fmsURLId = uuid.v4();
         return <fieldset>
             <legend>
-                {t("local-settings") }
+                {t("local-settings")}
             </legend>
             <div className="row">
                 <div className="col-sm-3 text-right">
                     <label for={nginxPathId} className="form-control-static">
-                        {t("path-to-nginx") }
+                        {t("path-to-nginx")}
                     </label>
                 </div>
                 <div className="col-sm-9">
@@ -34,13 +34,13 @@ export default class LocalSettings extends React.Component<Props, {}> {
                             style={{ width: "100%" }}
                             className="form-control"
                             value={this.props.nginxPath}
-                            onChange={e => this.props.onNginxPathChange((e.target as HTMLInputElement).value) }/>
+                            onChange={e => this.props.onNginxPathChange((e.target as HTMLInputElement).value)} />
                         <span className="input-group-btn">
                             <button
                                 type="button"
                                 className="btn btn-secondary"
-                                onClick={() => this.props.onNginxPathSelectorLaunch() }>
-                                {t("select") }
+                                onClick={() => this.props.onNginxPathSelectorLaunch()}>
+                                {t("select")}
                             </button>
                         </span>
                     </div>
@@ -49,7 +49,7 @@ export default class LocalSettings extends React.Component<Props, {}> {
             <div className="row">
                 <div className="col-sm-3 text-right">
                     <label for={portId} className="form-control-static">
-                        {t("port") }
+                        {t("port")}
                     </label>
                 </div>
                 <div className="col-sm-2">
@@ -59,11 +59,11 @@ export default class LocalSettings extends React.Component<Props, {}> {
                         min="1"
                         max="65535"
                         className="form-control"
-                        value={this.props.port}
-                        onChange={e => this.props.onPortChange(Number.parseInt((e.target as HTMLInputElement).value)) }/>
+                        value={"" + this.props.port}
+                        onChange={e => this.props.onPortChange(Number.parseInt((e.target as HTMLInputElement).value))} />
                 </div>
             </div>
-            <hr/>
+            <hr />
             <div className="row">
                 <div className="col-sm-3 text-right">
                     <label for={fmsURLId} className="form-control-static">FMS URL: </label>
@@ -77,15 +77,15 @@ export default class LocalSettings extends React.Component<Props, {}> {
                             style={{ width: "100%" }}
                             id={fmsURLId}
                             className="form-control"
-                            value={this.getFMSURL() }/>
+                            value={this.getFMSURL()} />
                         <span className="input-group-btn">
                             <button
                                 type="button"
                                 className="btn btn-secondary"
-                                onClick={() => this.copyFMSURL() }>
-                                <i className="fa fa-files-o"/>
+                                onClick={() => this.copyFMSURL()}>
+                                <i className="fa fa-files-o" />
                                 <span style={{ marginLeft: "0.5em" }}>
-                                    {t("copy") }
+                                    {t("copy")}
                                 </span>
                             </button>
                         </span>
@@ -94,7 +94,7 @@ export default class LocalSettings extends React.Component<Props, {}> {
             </div>
             <div className="row">
                 <div className="col-sm-push-3 col-sm-9">
-                    {t("notification-for-fms-url") }
+                    {t("notification-for-fms-url")}
                 </div>
             </div>
         </fieldset>;

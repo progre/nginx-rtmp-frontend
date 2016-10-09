@@ -23,6 +23,7 @@ module.exports = [
             entry: {
                 index: ["babel-polyfill", "./src/public/js/index.ts"]
             },
+            externals: /^(?!\.)/,
             module: {
                 loaders: [
                     {

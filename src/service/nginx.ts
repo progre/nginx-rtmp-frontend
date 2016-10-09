@@ -1,13 +1,13 @@
 import {ChildProcess, spawn} from "child_process";
 import {EventEmitter} from "events";
 import {dirname} from "path";
-import * as log4js from "log4js";
+const log4js = require("log4js");
 const logger = log4js.getLogger();
 import * as repository from "./repository";
 
 export default class Nginx extends EventEmitter {
     private exePath: string;
-    private process: ChildProcess;
+    private process: ChildProcess | null;
 
     start(exePath: string) {
         logger.info("Server starting: ", exePath, "-c", repository.NGINX_CONFIG_PATH);

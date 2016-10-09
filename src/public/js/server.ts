@@ -1,6 +1,6 @@
 const eRequire = require;
 const os = eRequire("os");
-const remote = eRequire("remote");
+const remote = eRequire("electron").remote;
 const dialog: Electron.Dialog = remote.require("dialog");
 const mainProcess = remote.getGlobal("mainProcess");
 
@@ -35,7 +35,7 @@ export default class Server {
     }
 
     showOpenDialog() {
-        return new Promise<string>((resolve, reject) => {
+        return new Promise<string | null>((resolve, reject) => {
             let filters = os.platform() === "win32"
                 ? [{ name: "nginx.exe", extensions: ["exe"] }]
                 : [];

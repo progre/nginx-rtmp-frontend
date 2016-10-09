@@ -1,9 +1,9 @@
-const app = require("app");
-import * as promisify from "native-promisify";
+import { app } from "electron";
+const promisify = require("native-promisify");
 import * as fs from "fs";
 const readFile = promisify(fs.readFile);
 const writeFile = promisify(fs.writeFile);
-import {normalize} from "path";
+import { normalize } from "path";
 import NginxConfig from "./nginxconfig";
 
 const CONFIG_PATH = app.getPath("userData") + "/" + "config.json";

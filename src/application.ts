@@ -1,13 +1,12 @@
-const app = require("app");
-const BrowserWindow = require("browser-window");
-import {visitor} from "./service/gafactory";
-import * as log4js from "log4js";
+import { app, BrowserWindow } from "electron";
+import { visitor } from "./service/gafactory";
+const log4js = require("log4js");
 const logger = log4js.getLogger();
 import TrayIcon from "./ui/trayicon";
-import {createMainWindow} from "./ui/windowfactory";
-import {initMenu} from "./ui/appmenu";
+import { createMainWindow } from "./ui/windowfactory";
+import { initMenu } from "./ui/appmenu";
 import Nginx from "./service/nginx";
-import {default as Repository, Config} from "./service/repository";
+import { default as Repository, Config } from "./service/repository";
 import NginxConfig from "./service/nginxconfig";
 const fetch = require("node-fetch");
 
@@ -16,7 +15,7 @@ const SERVICES = ["twitch", "peercaststation", "cavetube", "livecodingtv", "nico
 export default class Application {
     private nginx = new Nginx();
     private trayIcon = new TrayIcon();
-    private mainWindow: Electron.BrowserWindow = null;
+    private mainWindow: Electron.BrowserWindow | null = null;
 
     static async new() {
         let [, [repository, config, nginxConfig], ingests] = await Promise.all<any>([
@@ -114,7 +113,7 @@ export default class Application {
         if (this.mainWindow == null) {
             this.initMainWindow();
         }
-        this.mainWindow.show();
+        this.mainWindow!.show();
     }
 
     private initMainWindow() {

@@ -1,5 +1,4 @@
-const Menu = require("menu");
-const app = require("app");
+import { app, Menu } from "electron";
 
 export function initMenu() {
     if (process.platform !== "darwin") {

@@ -1,13 +1,19 @@
 {
   "name": "template-typescript",
   "version": false,
-  "dependencies": {},
+  "dependencies": {
+    "node-uuid": "registry:npm/node-uuid#1.4.7+20160723033700",
+    "universal-analytics": "registry:npm/universal-analytics#0.3.10+20160723033700"
+  },
   "globalDependencies": {
     "empower": "registry:dt/empower#0.0.0+20160317120654",
     "github-electron": "registry:dt/github-electron#1.2.5+20160624085047",
+    "i18next": "registry:dt/i18next#2.3.4+20160803175212",
     "mocha": "registry:dt/mocha#2.2.5+20160619032855",
     "node": "registry:dt/node#6.0.0+20160621231320",
     "power-assert": "registry:dt/power-assert#0.0.0+20160316155526",
-    "power-assert-formatter": "registry:dt/power-assert-formatter#0.0.0+20160317120654"
+    "power-assert-formatter": "registry:dt/power-assert-formatter#0.0.0+20160317120654",
+    "react": "registry:dt/react#0.14.0+20161008064207",
+    "react-dom": "registry:dt/react-dom#0.14.0+20160412154040"
   }
 }

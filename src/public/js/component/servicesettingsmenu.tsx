@@ -1,5 +1,5 @@
 import * as React from "react";
-import {ServiceDefinition, ServiceConfig} from "../domain/domains";
+import { ServiceDefinition, ServiceConfig } from "../domain/domains";
 
 export default function ServiceSettingsMenu(props: {
     serviceDefinitions: ServiceDefinition[],
@@ -12,14 +12,14 @@ export default function ServiceSettingsMenu(props: {
             props.serviceDefinitions
                 .map(x => x.name)
                 .map(name => {
-                    let definition = props.serviceDefinitions.find(x => x.name === name);
-                    let config = props.serviceConfigs.find(x => x.name === name);
+                    let definition = props.serviceDefinitions.find(x => x.name === name) !;
+                    let config = props.serviceConfigs.find(x => x.name === name) !;
                     return <MenuItem
                         key={definition.name}
                         primary={name === props.selectedService}
-                        serviceDefinition={definition }
-                        serviceConfig={config }
-                        onClick={() => props.onMenuClick(name) }/>;
+                        serviceDefinition={definition}
+                        serviceConfig={config}
+                        onClick={() => props.onMenuClick(name)} />;
                 })
         }
     </div>;
@@ -32,14 +32,14 @@ function MenuItem(props: {
     onClick: () => void
 }) {
     return <button
-        className={"btn text-left " + (props.primary ? "btn-primary" : "btn-secondary") }
+        className={"btn text-left " + (props.primary ? "btn-primary" : "btn-secondary")}
         onClick={props.onClick}>
         <span style={{ width: 16, height: 16 }} className="pull-left">
             <img
-                src={props.serviceDefinition.icon}
+                src={props.serviceDefinition.icon!}
                 width="16"
                 height="16"
-                onerror="this.style.display = 'none';"/>
+                onerror="this.style.display = 'none';" />
         </span>
         <span style={{ marginLeft: "0.5em" }} className="pull-left">
             {props.serviceDefinition.label}
@@ -47,7 +47,7 @@ function MenuItem(props: {
         <span className="pull-right">
             <i id={`${props.serviceDefinition.name}-check`}
                 className="fa fa-check"
-                style={{ display: props.serviceConfig.enabled ? "initial" : "none" }}/>
+                style={{ display: props.serviceConfig.enabled ? "initial" : "none" }} />
         </span>
     </button>;
 }

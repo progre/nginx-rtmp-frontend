@@ -37,8 +37,8 @@ const SERVICES = [
     },
     {
         name: "other",
-        icon: null as string,
-        url: null as string,
+        icon: null as string | null,
+        url: null as string | null,
         label: "Other"
     }
 ];
@@ -66,8 +66,8 @@ export default class ServiceSettings extends React.Component<Props, State> {
 
     render() {
         let selected = this.state.selectedService;
-        let selectedDefinition = SERVICES.find(x => x.name === selected);
-        let selectedConfig = this.props.serviceConfigs.find(x => x.name === selected);
+        let selectedDefinition = SERVICES.find(x => x.name === selected)!;
+        let selectedConfig = this.props.serviceConfigs.find(x => x.name === selected)!;
         return <fieldset>
             <legend>{t("service-settings")}</legend>
             <div className="row">

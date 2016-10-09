@@ -1,7 +1,7 @@
 import * as React from "react";
-import {t} from "i18next";
+import { t } from "i18next";
 
-export default function Footer(props: { needRestart: boolean, onRestart: Function }) {
+export default function Footer(props: { needRestart: boolean, onRestart: React.MouseEventHandler }) {
     return <fieldset className="text-right">
         <div className="row">
             <div className="col-sm-12">
@@ -11,8 +11,8 @@ export default function Footer(props: { needRestart: boolean, onRestart: Functio
                     className={[
                         "btn",
                         props.needRestart ? "btn-primary" : "btn-secondary"
-                    ].join(" ") }>
-                    {t("restart-nginx") }
+                    ].join(" ")}>
+                    {t("restart-nginx")}
                 </button>
             </div>
         </div>
@@ -20,7 +20,7 @@ export default function Footer(props: { needRestart: boolean, onRestart: Functio
             <div
                 style={{ display: props.needRestart ? "initial" : "none" }}
                 className="col-sm-12">
-                {t("notification-for-restart-nginx") }
+                {t("notification-for-restart-nginx")}
             </div>
         </div>
     </fieldset>;

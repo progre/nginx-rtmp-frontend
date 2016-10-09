@@ -1,7 +1,7 @@
 import * as React from "react";
-import {t} from "i18next";
+import { t } from "i18next";
 import * as uuid from "node-uuid";
-import {ServiceDefinition, ServiceConfig} from "../domain/domains";
+import { ServiceDefinition, ServiceConfig } from "../domain/domains";
 
 export default function ServiceSettingsContents(props: {
     definition: ServiceDefinition;
@@ -22,8 +22,8 @@ export default function ServiceSettingsContents(props: {
                             type="checkbox"
                             checked={props.config.enabled}
                             onChange={e => props.onEnabledChange(
-                                (e.target as HTMLInputElement).checked) }/>
-                        <span>{t("enable") }</span>
+                                (e.target as HTMLInputElement).checked)} />
+                        <span>{t("enable")}</span>
                     </label>
                 </div>
             </div>
@@ -45,7 +45,7 @@ export default function ServiceSettingsContents(props: {
                             className="form-control"
                             value={props.config.fms}
                             onChange={e => props.onFMSChange(
-                                (e.target as HTMLInputElement).value) }>
+                                (e.target as HTMLInputElement).value)}>
                             {
                                 props.twitchIngests.map(ingest =>
                                     <option key={ingest.name} value={ingest.url}>
@@ -60,7 +60,7 @@ export default function ServiceSettingsContents(props: {
                             className="form-control"
                             value={props.config.fms}
                             onChange={e => props.onFMSChange(
-                                (e.target as HTMLInputElement).value) }/>
+                                (e.target as HTMLInputElement).value)} />
                 }
             </div>
         </div>
@@ -68,14 +68,14 @@ export default function ServiceSettingsContents(props: {
             props.definition.name === "peercaststation"
                 ? <div className="row">
                     <div className="col-sm-push-3 col-sm-9"
-                        dangerouslySetInnerHTML={{ __html: t("notification-for-peercaststation") }}/>
+                        dangerouslySetInnerHTML={{ __html: t("notification-for-peercaststation") }} />
                 </div>
                 : <div className="row">
                     <div className="col-sm-3 text-right">
                         <label
                             for={streamKeyId}
                             className="form-control-static">
-                            {t("stream-key") }
+                            {t("stream-key")}
                         </label>
                     </div>
                     <div className="col-sm-9">
@@ -86,13 +86,13 @@ export default function ServiceSettingsContents(props: {
                             className="form-control"
                             value={props.config.key}
                             onChange={e => props.onStreamKeyChange(
-                                (e.target as HTMLInputElement).value) }/>
+                                (e.target as HTMLInputElement).value)} />
                     </div>
                 </div>
         }
         <div style={{ marginTop: "1em" }} className="row">
             <div className="col-sm-12 text-right">
-                <a href={props.definition.url}
+                <a href={props.definition.url!}
                     target="_blank"
                     className="selectable">
                     {props.definition.url}

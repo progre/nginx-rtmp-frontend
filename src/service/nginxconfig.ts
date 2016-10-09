@@ -1,5 +1,5 @@
 import * as fs from "fs";
-import * as promisify from "native-promisify";
+const promisify = require("native-promisify");
 const NginxConfFile = require("nginx-conf").NginxConfFile;
 const create = promisify(NginxConfFile.create);
 

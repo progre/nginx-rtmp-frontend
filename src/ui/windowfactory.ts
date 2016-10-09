@@ -1,5 +1,4 @@
-const BrowserWindow = require("browser-window");
-const shell = require("shell");
+import { BrowserWindow, shell } from "electron";
 import * as path from "path";
 
 export function createMainWindow() {
@@ -8,7 +7,7 @@ export function createMainWindow() {
         height: 800,
         resizable: true,
         show: false,
-        "skip-taskbar": true
+        skipTaskbar: true
     });
     win.webContents.on("new-window", (e: any, url: string) => {
         shell.openExternal(url);

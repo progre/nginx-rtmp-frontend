@@ -1,7 +1,6 @@
-const Tray = require("tray");
-const Menu = require("menu");
+import { Menu, Tray } from "electron";
 import * as path from "path";
-import {EventEmitter} from "events";
+import { EventEmitter } from "events";
 
 export default class TrayIcon extends EventEmitter {
     private tray = createTray();
