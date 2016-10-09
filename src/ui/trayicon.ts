@@ -34,7 +34,7 @@ export default class TrayIcon extends EventEmitter {
 }
 
 function createTray() {
-    let resourcePath = path.normalize(__dirname + "/../res");
+    let resourcePath = path.normalize(__dirname + "/res");
     let tray = new Tray(process.platform === "darwin"
         ? resourcePath + "/icon_16px@3x.png"
         : resourcePath + "/icon_192px.png");

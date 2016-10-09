@@ -12,6 +12,6 @@ export function createMainWindow() {
     win.webContents.on("new-window", (e: any, url: string) => {
         shell.openExternal(url);
     });
-    win.loadURL(path.normalize(`file://${__dirname}/../public/index.html`));
+    win.loadURL(path.normalize(`file://${__dirname}/public/index.html`));
     return win;
 }
