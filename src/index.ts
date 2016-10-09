@@ -1,9 +1,7 @@
-/// <reference path="../typings/main.d.ts" />
 try { require("source-map-support").install(); } catch (e) { /* empty */ }
-require("crash-reporter").start();
-const app: any = require("app");
+const log4js = require("log4js");
+import {app, BrowserWindow} from "electron";
 import {visitor} from "./service/gafactory";
-import * as log4js from "log4js";
 import Application from "./application";
 
 log4js.configure({

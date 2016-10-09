@@ -1,4 +1,0 @@
-{
-    sourceMaps: true,
-    presets: [ "modern-node/5.5" ]
-}

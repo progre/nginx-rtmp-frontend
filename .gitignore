@@ -4,4 +4,4 @@ lib
 nginx-rtmp-frontend-*/
 node_modules
 tmp
-typings/DefinitelyTyped/
+typings
