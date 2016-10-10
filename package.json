@@ -1,7 +1,7 @@
 {
   "name": "nginx-rtmp-frontend",
   "description": "A frontend for nginx-rtmp-module.",
-  "version": "0.2.9",
+  "version": "0.2.10",
   "author": "progre",
   "bugs": "https://github.com/progre/nginx-rtmp-frontend/issues",
   "dependencies": {
