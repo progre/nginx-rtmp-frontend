@@ -8,7 +8,7 @@ import NginxConfig from "./nginxconfig";
 
 const CONFIG_PATH = app.getPath("userData") + "/" + "config.json";
 export const NGINX_CONFIG_PATH = app.getPath("userData") + "/" + "nginx.conf";
-const NGINX_CONFIG_TEMPLATE_PATH = normalize(__dirname + "/res/nginx-default.conf");
+const NGINX_CONFIG_TEMPLATE_PATH = normalize("./lib/res/nginx-default.conf");
 
 export default class Repository {
     static async new() {
