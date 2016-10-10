@@ -21,7 +21,7 @@ module.exports = [
         common,
         {
             entry: {
-                index: ["babel-polyfill", "./src/public/js/index.ts"]
+                index: ["./src/public/js/index.ts"]
             },
             externals: /^(?!\.)/,
             module: {
@@ -64,8 +64,8 @@ module.exports = [
         common,
         {
             entry: {
-                index: ["babel-polyfill", "./src/index.ts"],
-                "test/test": ["babel-polyfill", "./src/test/test.ts"]
+                index: ["./src/index.ts"],
+                "test/test": ["./src/test/test.ts"]
             },
             externals: /^(?!\.)/,
             module: {
@@ -75,7 +75,13 @@ module.exports = [
                 }]
             },
             node: {
-                __dirname: false
+                console: false,
+                global: false,
+                process: false,
+                Buffer: false,
+                __filename: false,
+                __dirname: false,
+                setImmediate: false
             },
             output: {
                 filename: "lib/[name].js",
