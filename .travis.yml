@@ -17,7 +17,7 @@ deploy:
     secure: jLYF5qEWrS2gETXho9sOK7sFRKrLl9AnItmGdJ8ljDsJRmaQGLBith4t69WcTMp9e1dRIJhBUDqLn/KWjk3hR5xZlHqEvWDeptN8eOyBDMkJniK48jpBYKlFl81Ad2kNL1DyI2EtMPinwzmbOGjyzS9ELdbObZOBPrmkzfntxLse6TxvIGzcSIOyo28c59x6cPBUv0rgF90yCubw12Ygo7rEhGCJG9QX988hPvdPNMQCmD0Ad9ihgq44VYsseRj0i3zFgOowLNQX7GmPj0nwqvwggh5ld8XGx1YyC/piogGK6qbJs9I2AIO9ohblLGH1FCKlVbNxXYxwnD2jmMntV0hndzLcR7BqQrlFbNFQh08FB39sFbU14qn58Ek12gjrjijtLNZr4mxJlK7YX+W4pVkZ9AD2fd6pG4ESpomjYKqq0pk6Fa3aPRGfh9oEMrsVje+qokNgZQsjs40xlXKYz3AEfAdg2DPwJc6zN7FVEV39d8w4BWazB6/gNW5cHlJ6I3SntmA+hjEA04Pz/IHXuzPotYXL/1ijHdDhY9qWuUx/7MyQ1pNRsKzBQyVzYkAS08+D2gMliHHe8iIjxTQvtNmKRM6/20wO2W8c9uocUrBDkMeh9dOmfp3JzZXTwVTBaLF+XXygL6iltuFNDEJjpkXf1YTy4fAVIYwWEQE5t78=
   file:
     - nginx-rtmp-frontend-linux.zip
-    - nginx-rtmp-frontend-osx.zip
+    - nginx-rtmp-frontend-mac.zip
     - nginx-rtmp-frontend-win.zip
   prerelease: true
   on:
