@@ -27,9 +27,9 @@ export default class Application {
                     repository.getConfig(),
                     repository.nginxConfig
                 ])),
-            fetch("https://api.twitch.tv/kraken/ingests")
+            /* fetch("https://api.twitch.tv/kraken/ingests")
                 .then((res: any) => res.json())
-                .then((json: any) => json.ingests)
+                .then((json: any) => json.ingests ||*/ [{ name: "Tokyo", url_template: "rtmp://live-tyo.twitch.tv/app/{stream_key}" }]
         ]);
         let instance = new Application(repository, config, nginxConfig, ingests);
         if (repository == null || config == null || nginxConfig == null) {

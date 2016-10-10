@@ -1,7 +1,7 @@
 const eRequire = require;
 const os = eRequire("os");
 const remote = eRequire("electron").remote;
-const dialog: Electron.Dialog = remote.require("dialog");
+const dialog: Electron.Dialog = remote.require("electron").dialog;
 const mainProcess = remote.getGlobal("mainProcess");
 
 export default class Server {

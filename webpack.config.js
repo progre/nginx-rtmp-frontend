@@ -37,7 +37,8 @@ module.exports = [
                 ]
             },
             output: {
-                filename: "lib/public/js/[name].js"
+                filename: "lib/public/js/[name].js",
+                libraryTarget: "commonjs2"
             },
             plugins: common.plugin.concat([
                 new CopyWebpackPlugin(
