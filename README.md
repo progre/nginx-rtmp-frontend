@@ -1,3 +1,5 @@
+# This project has been deprecated. Please use the new project [here](https://github.com/progre/nrf/).
+
 nginx-rtmp-frontend [![Build Status](https://travis-ci.org/progre/nginx-rtmp-frontend.svg)](https://travis-ci.org/progre/nginx-rtmp-frontend)
 ====
 
