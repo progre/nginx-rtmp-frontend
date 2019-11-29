@@ -6,7 +6,7 @@
   "bugs": "https://github.com/progre/nginx-rtmp-frontend/issues",
   "dependencies": {
     "babel-polyfill": "^6.16.0",
-    "i18next": "^2.4.1",
+    "i18next": "^19.0.1",
     "i18next-browser-languagedetector": "^0.2.2",
     "i18next-xhr-backend": "^0.5.3",
     "log4js": "^0.6.37",
