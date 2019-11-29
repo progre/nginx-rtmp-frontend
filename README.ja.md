@@ -1,3 +1,5 @@
+# これは古いバージョンなので、 [こっち](https://github.com/progre/nrf/) にある新しい方を使ってください。
+
 nginx-rtmp-frontend [![Build Status](https://travis-ci.org/progre/nginx-rtmp-frontend.svg)](https://travis-ci.org/progre/nginx-rtmp-frontend)
 ====
 
